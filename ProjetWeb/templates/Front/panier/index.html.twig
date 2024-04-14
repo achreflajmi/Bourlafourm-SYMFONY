@@ -1,0 +1,60 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block body %}
+<body>
+  <div class="site-wrap">
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <div class="hero overlay" style="background-image: url('assets/images/background.jpg');">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-5 mx-auto text-center">
+            <h1 class="text-white">Votre Panier</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta, molestias repudiandae pariatur.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container site-section">
+      <div class="row">
+        <div class="col-12 title-section">
+          <h2 class="heading">Détails du Panier</h2>
+        </div>
+      </div>
+      <div class="row">
+    {% for article in articles %}
+    <div class="col-lg-6 mb-4">
+        <div class="custom-media d-flex">
+            <div class="img mr-4">
+                <img src="{{ asset('assets/' ~ article.getImageProd()) }}" alt="Image du produit" class="img-fluid">
+            </div>
+            <div class="text">
+                <h3 class="mb-1">{{ article.getNomProd() }}</h3>
+                <p class="meta">Prix: {{ article.getPrixProd() }}€ - Quantité: {{ article.quantitePanier }}</p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-lg-12 text-center">
+        <p>Votre panier est vide.</p>
+    </div>
+    {% endfor %}
+</div>
+
+      </div>
+    </div>
+
+    <footer class="footer-section">
+      <!-- Footer content -->
+    </footer>
+  </div>
+</body>
+{% endblock %}
