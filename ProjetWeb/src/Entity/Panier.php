@@ -23,11 +23,13 @@ class Panier
     #[ORM\Column]
     private ?float $total_panier = null;
 
-    #[ORM\Column]
-    private ?int $id_prod = null;
+     // Relationship to Produit
+     #[ORM\ManyToOne(targetEntity: "App\Entity\Produit", inversedBy: "paniers")]
+     #[ORM\JoinColumn(name: "id_prod", referencedColumnName: "id", nullable: false)]
+     private ?Produit $produit = null;
 
     #[ORM\Column]
-    private ?int $quantite_panier = null;
+    public ?int $quantite_panier = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nom_prod = null;
@@ -67,15 +69,14 @@ class Panier
         return $this;
     }
 
-    public function getIdProd(): ?int
+    public function getProduit(): ?Produit
     {
-        return $this->id_prod;
+        return $this->produit;
     }
 
-    public function setIdProd(int $id_prod): static
+    public function setProduit(?Produit $produit): self
     {
-        $this->id_prod = $id_prod;
-
+        $this->produit = $produit;
         return $this;
     }
 

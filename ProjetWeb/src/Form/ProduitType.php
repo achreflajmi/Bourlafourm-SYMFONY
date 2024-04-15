@@ -16,6 +16,7 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
+
 class ProduitType extends AbstractType
 {
     private $entityManager;
@@ -26,6 +27,8 @@ class ProduitType extends AbstractType
     }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $categoryChoices = $options['categoryChoices']; 
+
         $builder
             ->add('nom_prod')
             ->add('prix_prod')
@@ -35,13 +38,12 @@ class ProduitType extends AbstractType
                 'label' => 'Image du produit',
                 'required' => false,
             ])
-          /*  ->add('nom_categorie', EntityType::class, [
-                'label' => 'Categorie',
+            ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
-                'choice_label' => 'nom_categorie',  // Display text in the dropdown from 'nom_categorie' property
-                'choice_value' => 'id',  
+                'choice_label' => 'nom_categorie',
+                'placeholder' => 'Choose a category',
                 'attr' => ['class' => 'form-control'],
-            ])*/
+            ])
             
             ->add('Ajouter', SubmitType::class);
             
@@ -79,6 +81,8 @@ class ProduitType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        
+        $resolver->setRequired('categoryChoices');
         $resolver->setDefaults([
             'data_class' => Produit::class,
         ]);

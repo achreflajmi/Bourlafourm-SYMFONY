@@ -43,18 +43,25 @@ class ProduitController extends AbstractController
     #[Route('/addProduit', name: 'addProduit')]
     public function addProduit(Request $request, EntityManagerInterface $em): Response
     {
+        // Fetch category entities instead of just names
+        $entityManager = $this->getDoctrine()->getManager();
+        $categories = $entityManager->getRepository(Categorie::class)->findAll();
+        $categoryChoices = [];
+        foreach ($categories as $categorie) {
+            $categoryChoices[$categorie->getNomCategorie()] = $categorie;
+        }
+    
+        // Create the form with category choices
         $produit = new Produit();
-        $categorie = new Categorie();
-        $form = $this->createForm(ProduitType::class, $produit);
-         
-
-        $produit->setNomCategorie(1);
+        $form = $this->createForm(ProduitType::class, $produit, [
+            'categoryChoices' => $categoryChoices,
+        ]);
+    
+        // Handle form submission
         $form->handleRequest($request);
-        $choixCategories = null; // Assign null temporarily
-    
         if ($form->isSubmitted() && $form->isValid()) {
+            // Handle file upload
             $imageFile = $form->get('image_prod')->getData();
-    
             if ($imageFile instanceof UploadedFile) {
                 $newFilename = uniqid() . '.' . $imageFile->guessExtension();
                 $imageFile->move(
@@ -63,54 +70,70 @@ class ProduitController extends AbstractController
                 );
                 $produit->setImageProd($newFilename);
             }
+    
+            // Persist and flush the entity
             $em->persist($produit);
             $em->flush();
     
+            // Redirect to the desired route after successful submission
             return $this->redirectToRoute('display_produit');
         }
     
-        $entityManager = $this->getDoctrine()->getManager();
-        $produits = $entityManager->getRepository(Produit::class)->findAll();
-        $categories = $entityManager->getRepository(Categorie::class)->findAll();
-        $categorieChoices = [];
-    
-        foreach ($categories as $categorie) { 
-            $categorieChoices[$categorie->getNomCategorie()] = $categorie->getId();
-        }
-    
-        return $this->renderForm('Back/produit/createProduit.html.twig', [
-            'produits' => $produits,
-            'f' => $form, // Pass the form object directly
-            'categorieChoices' => $categorieChoices,
+        // Render the form
+        return $this->render('Back/produit/createProduit.html.twig', [
+            'f' => $form->createView(),
         ]);
     }
+    
+    
    
 
     #[Route('/editProduit/{id}', name: 'editProduit')]
-    public function modifierProduit(Request $request,$id): Response
+    public function modifierProduit(Request $request, $id): Response
     {
-            $produit = $this->getDoctrine()->getManager()->getRepository(Produit::class)->find($id);
-            $form = $this ->createForm(ProduitType::class,$produit);
-            $form->handleRequest($request);
-            if($form->isSubmitted() && $form->isValid()){
-                $em = $this->getDoctrine()->getManager();
-                $imageFile = $form->get('image_prod')->getData();
-
-                if ($imageFile instanceof UploadedFile) {
-                    $newFilename = uniqid().'.'.$imageFile->guessExtension();
-                    $imageFile->move(
-                        $this->getParameter('kernel.project_dir').'/public/assets/',
-                        $newFilename
-                    );
-                    $produit->setImageProd($newFilename);
-                }
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        // Fetch category entities
+        $categories = $entityManager->getRepository(Categorie::class)->findAll();
+        $categoryChoices = [];
+        foreach ($categories as $categorie) {
+            $categoryChoices[$categorie->getNomCategorie()] = $categorie;
+        }
+        
+        // Find the product entity by its ID
+        $produit = $entityManager->getRepository(Produit::class)->find($id);
+        
+        // Create the form with category choices and pre-populate with existing data
+        $form = $this->createForm(ProduitType::class, $produit, [
+            'categoryChoices' => $categoryChoices,
+        ]);
     
-                    $em->flush();
-                return $this->redirectToRoute('display_produit');
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle file upload
+            $imageFile = $form->get('image_prod')->getData();
+            if ($imageFile instanceof UploadedFile) {
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                $imageFile->move(
+                    $this->getParameter('kernel.project_dir').'/public/assets/',
+                    $newFilename
+                );
+                $produit->setImageProd($newFilename);
             }
-            return $this->render('Back/produit/updateProduit.html.twig', ['f' => $form->createView()]);
-
+    
+            // Flush the changes
+            $entityManager->flush();
+    
+            // Redirect to the desired route after successful submission
+            return $this->redirectToRoute('display_produit');
+        }
+    
+        return $this->render('Back/produit/updateProduit.html.twig', [
+            'f' => $form->createView(),
+        ]);
     }
+    
     #[Route('/deleteProduit/{id}', name: 'suppProduit')]
     public function supprimerProduit(int $id, SessionInterface $session): Response
     {
