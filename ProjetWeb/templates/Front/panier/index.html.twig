@@ -30,23 +30,48 @@
         </div>
       </div>
       <div class="row">
-    {% for article in articles %}
-    <div class="col-lg-6 mb-4">
-        <div class="custom-media d-flex">
-            <div class="img mr-4">
-                <img src="{{ asset('assets/' ~ article.getImageProd()) }}" alt="Image du produit" class="img-fluid">
+        {% set totalPanier = 0 %}
+        {% set productDetails = [] %}
+        {% for article in articles %}
+        <div class="col-lg-6 mb-4">
+            <div class="custom-media d-flex">
+                <div class="img mr-4">
+                    <img src="{{ asset('assets/' ~ article.getProduit().getImageProd() ) }}" alt="Image du produit" class="img-fluid">
+                </div>
+                <div class="text">
+                    <h3 class="mb-1">{{ article.getProduit().getNomProd() }}</h3>
+                    <p class="meta">Prix: {{ article.getProduit().getPrixProd() }} TND</p>
+                    <p class="meta">Quantité: {{ article.getQuantitePanier() }}</p>
+<a href="{{ path('supprimer_du_panier', {'id': article.getId()}) }}" class="btn py-3 px-4 mr-3" style="color: #fff; background-color: #008152; border-color: #008152;">
+  Supprimer du panier
+</a>
+                </div>
             </div>
-            <div class="text">
-                <h3 class="mb-1">{{ article.getNomProd() }}</h3>
-                <p class="meta">Prix: {{ article.getPrixProd() }}€ - Quantité: {{ article.quantitePanier }}</p>
-            </div>
+            {% set totalPanier = totalPanier + (article.getProduit().getPrixProd() * article.getQuantitePanier()) %}
+            {% set productDetails = productDetails|merge([{name: article.getProduit().getNomProd(), price: article.getProduit().getPrixProd(), quantity: article.getQuantitePanier()}]) %}
         </div>
-    </div>
-    {% else %}
-    <div class="col-lg-12 text-center">
-        <p>Votre panier est vide.</p>
-    </div>
+        {% else %}
+        <div class="col-lg-12 text-center">
+            <p>Votre panier est vide.</p>
+        </div>
+        {% endfor %}
+      <div class="col-12" style="background-color: transparent; border: 2px solid #008152; padding: 20px; color:white;">
+  <h3 class="heading">Récapitulatif du Panier</h3>
+  <ul class="container site-section" style="list-style-type: none; padding: 0;">
+    {% for detail in productDetails %}
+    <li class="d-flex justify-content-between lh-condensed" style="border-bottom: 1px solid #008152; padding: 10px 0;">
+      <div>
+        <h6 class="my-0">{{ detail.name }}</h6>
+        <small style="color: #008152;">Quantité: {{ detail.quantity }}</small>
+      </div>
+      <span  style="color: #fff;">{{ detail.price }} TND</span>
+    </li>
     {% endfor %}
+    <li class="d-flex justify-content-between" style="border-bottom: none; padding: 10px 0;">
+      <span>Total (TND)</span>
+      <strong style="color: #fff;">{{ totalPanier }} TND</strong>
+    </li>
+  </ul>
 </div>
 
       </div>

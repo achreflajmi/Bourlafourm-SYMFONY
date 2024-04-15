@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 class Categorie
@@ -14,12 +15,18 @@ class Categorie
     public ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom de la catégorie est requis")]
+    #[Assert\Type(type: "string", message: "Le nom de la catégorie doit être une chaîne de caractères")]
     public ?string $nom_categorie = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La description de la catégorie est requise")]
+    #[Assert\Type(type: "string", message: "La description de la catégorie doit être une chaîne de caractères")]
     public ?string $description_categorie = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le type de la catégorie est requis")]
+    #[Assert\Type(type: "string", message: "Le type de la catégorie doit être une chaîne de caractères")]
     public ?string $type_categorie = null;
 
     public function getId(): ?int
@@ -32,7 +39,7 @@ class Categorie
         return $this->nom_categorie;
     }
 
-    public function setNomCategorie(string $nom_categorie): static
+    public function setNomCategorie(?string $nom_categorie): self
     {
         $this->nom_categorie = $nom_categorie;
 
@@ -44,7 +51,7 @@ class Categorie
         return $this->description_categorie;
     }
 
-    public function setDescriptionCategorie(string $description_categorie): static
+    public function setDescriptionCategorie(?string $description_categorie): self
     {
         $this->description_categorie = $description_categorie;
 
@@ -56,7 +63,7 @@ class Categorie
         return $this->type_categorie;
     }
 
-    public function setTypeCategorie(string $type_categorie): static
+    public function setTypeCategorie(?string $type_categorie): self
     {
         $this->type_categorie = $type_categorie;
 

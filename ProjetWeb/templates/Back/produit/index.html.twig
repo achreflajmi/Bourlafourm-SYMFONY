@@ -3,10 +3,9 @@
 {% block title %}Liste des Produits{% endblock %}
 
 {% block body %}
-<div class="container-fluid" style="margin-top: 150px">
-  <div class="row justify-content-center">
-    <div class="col-md-4">  </div>
-    <div class="col-md-8" style="display: flex;align-items: center;justify-content: center"> 
+<div class="container-fluid mt-3" style="margin-top: 150px">
+  <div class="row">
+    <div> 
      <div class="card">
         <div class="card-body">
           <h4 class="card-title">Liste des Produits</h4>
@@ -31,19 +30,20 @@
                   <td>{{ produit.prixProd }}</td>
                   <td>{{ produit.descriptionProd }}</td>
                   <td>{{ produit.quantiteProd }}</td>
-                  <td>       {% if produit.getImageProd() %}
-                            <img src="{{ asset('assets/' ~ produit.getImageProd()) }}" alt="Image du produit" style="width: 250px; height: 250px; object-fit: cover;">
-                                    {% else %}
-                                        No Image
-                                    {% endif %}</td>
-                  <td>{{ produit.nom_categorie }}</td>
                   <td>
-                    <a href="{{ path('editProduit',{'id':produit.id}) }}" class="btn btn-primary btn-sm">Modifier
-                    
-                    </a>
+                    {% if produit.getImageProd() %}
+                      <img src="{{ asset('assets/' ~ produit.getImageProd()) }}" alt="Image du produit" style="width: 250px; height: 250px; object-fit: cover;">
+                    {% else %}
+                      No Image
+                    {% endif %}
+                  </td>
+                  <td>{{ produit.getCategorie().getNomCategorie() }}</td> {# Accessing the nom_categorie property through the associated Categorie entity #}
+                  <td>
+                    <a href="{{ path('editProduit',{'id':produit.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
                   </td>
                   <td>
-                 <a href="{{ path('suppProduit',{'id':produit.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>                  </td>
+                    <a href="{{ path('suppProduit',{'id':produit.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                  </td>
                 </tr>
                 {% endfor %}
               </tbody>
