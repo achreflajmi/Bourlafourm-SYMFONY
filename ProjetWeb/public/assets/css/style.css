@@ -532,7 +532,8 @@ pre {
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin-left: 430px; }
+  margin-right: -12px;
+  margin-left: -12px; }
 
 .no-gutters {
   margin-right: 0;
