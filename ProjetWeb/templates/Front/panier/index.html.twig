@@ -17,7 +17,7 @@
         <div class="row align-items-center">
           <div class="col-lg-5 mx-auto text-center">
             <h1 class="text-white">Votre Panier</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta, molestias repudiandae pariatur.</p>
+            <p>Votre Panier est disponible ici</p>
           </div>
         </div>
       </div>
@@ -42,7 +42,7 @@
                     <h3 class="mb-1">{{ article.getProduit().getNomProd() }}</h3>
                     <p class="meta">Prix: {{ article.getProduit().getPrixProd() }} TND</p>
                     <p class="meta">Quantité: {{ article.getQuantitePanier() }}</p>
-<a href="{{ path('supprimer_du_panier', {'id': article.getId()}) }}" class="btn py-3 px-4 mr-3" style="color: #fff; background-color: #008152; border-color: #008152;">
+<a href="{{ path('supprimer_du_panier', {'id': article.getId()}) }}" class="btn py-3 px-4 mr-3 btn-primary" ">
   Supprimer du panier
 </a>
                 </div>

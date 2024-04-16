@@ -1,6 +1,6 @@
 {% extends 'baseFront.html.twig' %}
 
-{%  block body %}
+{% block body %}
 <body>
 
   <div class="site-wrap">
@@ -19,121 +19,57 @@
         <div class="row align-items-center">
           <div class="col-lg-5 mx-auto text-center">
             <h1 class="text-white">Produits</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta, molestias repudiandae pariatur.</p>
+            <p>Vos produit sont disponible ici</p>
           </div>
         </div>
       </div>
     </div>
 
-    
-    
     <div class="container site-section">
       <div class="row">
         <div class="col-6 title-section">
           <h2 class="heading">Latest Blog</h2>
         </div>
       </div>
- <div class="row">
-  {% for produit in p %}
-    <div class="col-lg-4 mb-4">
-      <div class="custom-media d-block">
-        <div class="img mb-4">
-          {% if produit.getImageProd() %}
-            <a href="single.html">
-              <img src="{{ asset('assets/' ~ produit.getImageProd()) }}" alt="Image du produit" class="img-fluid">
-            </a>
-          {% else %}
-            No Image
-          {% endif %}
-        </div>
-        <div class="text">
-          <span class="meta">{{ produit.prix_prod }}</span>
-          <h3 class="mb-4"><a href="#">{{ produit.nomProd }}</a></h3>
-          <p style="color: #fff;">{{ produit.description_prod }}</p>
-<p><a href="#" style="color: #008152;">{{ produit.getCategorie().getNomCategorie() }}</a></p>
-<a href="{{ path('ajouterPanier', {'idProduit': produit.id}) }}" class="btn py-3 px-4 mr-3" style="color: #fff; background-color: #008152; border-color: #008152;">
-  Ajouter au panier
-</a>
-        </div>
-      </div>
-    </div>
-  {% endfor %}
-</div>
-
-        
-        </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-lg-7 text-center">
-          <div class="custom-pagination">
-            <a href="#">1</a>
-            <span>2</span>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
+      <div class="row">
+        {% for produit in p %}
+        <div class="col-lg-4 mb-4">
+          <div class="custom-media d-block">
+            <div class="img mb-4">
+              {% if produit.getImageProd() %}
+              <a href="single.html">
+                <img src="{{ asset('assets/' ~ produit.getImageProd()) }}" alt="Image du produit" class="img-fluid">
+              </a>
+              {% else %}
+              No Image
+              {% endif %}
+            </div>
+            <div class="text">
+              <span class="meta">{{ produit.prix_prod }}</span>
+              <h3 class="mb-4"><a href="#">{{ produit.nomProd }}</a></h3>
+              <p style="color: #fff;">{{ produit.description_prod }}</p>
+              <p><a href="#" style="color: #008152;">{{ produit.getCategorie().getNomCategorie() }}</a></p>
+              <a href="{{ path('ajouterPanier', {'idProduit': produit.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
+                Ajouter au panier
+              </a>
+            </div>
           </div>
         </div>
+        {% endfor %}
       </div>
     </div>
 
-
-    
-    
-
-
-
-    <footer class="footer-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3">
-            <div class="widget mb-3">
-              <h3>News</h3>
-              <ul class="list-unstyled links">
-                <li><a href="#">All</a></li>
-                <li><a href="#">Club News</a></li>
-                <li><a href="#">Media Center</a></li>
-                <li><a href="#">Video</a></li>
-                <li><a href="#">RSS</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="widget mb-3">
-              <h3>Tickets</h3>
-              <ul class="list-unstyled links">
-                <li><a href="#">Online Ticket</a></li>
-                <li><a href="#">Payment and Prices</a></li>
-                <li><a href="#">Contact &amp; Booking</a></li>
-                <li><a href="#">Tickets</a></li>
-                <li><a href="#">Coupon</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="widget mb-3">
-              <h3>Matches</h3>
-              <ul class="list-unstyled links">
-                <li><a href="#">Standings</a></li>
-                <li><a href="#">World Cup</a></li>
-                <li><a href="#">La Lega</a></li>
-                <li><a href="#">Hyper Cup</a></li>
-                <li><a href="#">World League</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="widget mb-3">
-              <h3>Social</h3>
-              <ul class="list-unstyled links">
-                <li><a href="#">Twitter</a></li>
-                <li><a href="#">Facebook</a></li>
-                <li><a href="#">Instagram</a></li>
-                <li><a href="#">Youtube</a></li>
-              </ul>
-            </div>
-          </div>
-
+    <div class="row justify-content-center">
+      <div class="col-lg-7 text-center">
+        <div class="custom-pagination">
+          <a href="#" style="color: #008152;">1</a>
+          <span style="color: #008152;">2</span>
+          <a href="#" style="color: #008152;">3</a>
+          <a href="#" style="color: #008152;">4</a>
+          <a href="#" style="color: #008152;">5</a>
         </div>
+      </div>
+    </div>
+  </div>
+</body>
 {% endblock %}

@@ -36,10 +36,13 @@ class Produit
     public ?int $quantite_prod = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'image est requise")]
     public ?string $image_prod = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Categorie", inversedBy: "produits")]
     #[ORM\JoinColumn(name: "nom_categorie", referencedColumnName: "id", nullable: false)]
+    #[Assert\NotBlank(message: "La catégorie est requise")]
+
     public ?Categorie $categorie = null;
 
     public function getCategorie(): ?Categorie
