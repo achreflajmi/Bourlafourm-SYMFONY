@@ -1,0 +1,111 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block title %}Formulaire de Regime{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <br><br>      <br><br>    <br><br>   <br><br> 
+    <h1 class="text-center mb-4">Formulaire de Regime</h1>
+
+    <div class="row justify-content-center">
+        <!-- Image à gauche avec le style du cadre -->
+        <div class="col-md-6 order-md-1">
+            <div class="hero overlay image-cadre" style="background-image: url('{{ asset('assets/images/LOGOO.jpg') }}'); width: 500px; height: 400px;">
+                <!-- Contenu supplémentaire à ajouter ici si nécessaire -->
+            </div>
+        </div>
+
+        <!-- Formulaire déplacé à droite -->
+        <div class="col-md-6 order-md-2">
+            <form method="post" novalidate>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn btn-primary btn-block mb-3">AJOUTER</button>
+                {{ form_end(form) }}
+            </form>
+        </div>
+    </div>
+<style>
+.btn-primary {
+    color: #fff;
+    background-color: #0c4008;
+    border-color: #1e8d18;
+}
+
+
+/* Style pour le cadre de l'image */
+.image-cadre {
+    border: 3px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    background: #a2f797; /* Couleur verte pour l'arrière-plan */
+    position: relative;
+}
+
+/* Style pour l'arrière-plan semi-transparent */
+.hero.overlay:before {
+    /* content: ""; */
+    position: absolute;
+    background: rgb(10 98 30 / 50%);
+    /* top: 0; */
+    /* left: 0; */
+    /* right: 0; */
+    bottom: 0;
+}
+
+/* Style spécifique pour les contrôles de formulaire */
+.form-control {
+    height: 43px;
+    border-radius: 4px;
+    background: none;
+    border-width: 1px;
+    color: #34c724 !important;
+    border-color: rgb(26 199 82 / 20%);
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+</style>
+
+  <div class="row justify-content-center">
+   
+        <div class="card bg-light w-100">
+            <div class="card-header text-white bg-blue border-bottom-0">
+                Liste des Regimes
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>petitdej</th>
+                        <th>colpdej</th>
+                        <th>dej</th>
+                        <th>coldej</th>
+                        <th>diner</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for coord in Regime %}
+                        <tr>
+                            <td>{{ coord.petitdej }}</td>
+                            <td>{{ coord.colpdej }}</td>
+                            <td>{{ coord.dej }}</td>
+                            <td>{{ coord.coldej }}</td>
+                            <td>{{ coord.diner }}</td>
+                            <td>
+                            
+                       <a href="{{ path('edit', {'id': coord.id }) }}" class="green-link"> Edit</a>
+
+     <a href="{{ path('delete_regime', {'id': coord.id }) }}" class="green-link"> Delete</a>
+
+
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+  
+{% endblock %}
