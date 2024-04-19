@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ProduitController extends AbstractController
 {
@@ -27,10 +28,10 @@ class ProduitController extends AbstractController
     #[Route('/produits', name: 'displayFront')]
     public function indexFront(): Response
     {
-
         $produits= $this->getDoctrine()->getManager()->getRepository(Produit::class)->findAll();
+        
         return $this->render('Front/produit/index.html.twig', [
-           'p'=>$produits
+           'p' => $produits 
         ]);
     }
     #[Route('/admin', name: 'display_produitAdmin')]
@@ -157,5 +158,20 @@ class ProduitController extends AbstractController
         $session->getFlashBag()->add('success', 'Product deleted successfully.');
         return $this->redirectToRoute('display_produit');
     }
+    #[Route('/searchProduit', name: 'search_produit')]
+    public function searchProduit(Request $request, EntityManagerInterface $em): Response
+    {
+        $query = $request->request->get('query');
+    
+        $results = $em->getRepository(Produit::class)->search($query);
+    
+        // Render only the search results template without the full layout
+        return $this->render('Front/produit/search_results.html.twig', [
+            'results' => $results,
+        ]);
+    }
+
+    
+    
 }
 
