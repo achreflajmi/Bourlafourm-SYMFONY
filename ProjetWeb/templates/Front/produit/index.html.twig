@@ -19,7 +19,7 @@
         <div class="row align-items-center">
           <div class="col-lg-5 mx-auto text-center">
             <h1 class="text-white">Produits</h1>
-            <p>Vos produit sont disponible ici</p>
+            <p>Vos produits sont disponibles ici</p>
           </div>
         </div>
       </div>
@@ -28,10 +28,20 @@
     <div class="container site-section">
       <div class="row">
         <div class="col-6 title-section">
-          <h2 class="heading">Latest Blog</h2>
+          <h2 class="heading">Latest Products</h2>
         </div>
       </div>
+
       <div class="row">
+        <div class="col-md-12"> <!-- Expand the search input to take the entire width -->
+          <div class="search-container"> <!-- New container for search input -->
+            <input type="text" id="searchInput" class="search-input" placeholder="Search..."> <!-- Apply search-input class -->
+          </div>
+          <div id="searchResults"></div>
+        </div>
+      </div>
+
+      <div class="row existing-products">
         {% for produit in p %}
         <div class="col-lg-4 mb-4">
           <div class="custom-media d-block">
@@ -57,6 +67,7 @@
         </div>
         {% endfor %}
       </div>
+
     </div>
 
     <div class="row justify-content-center">
@@ -71,5 +82,54 @@
       </div>
     </div>
   </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#searchInput').on('input', function() {
+        var query = $(this).val().trim();
+        if (query.length > 0) {
+          $.ajax({
+            url: "{{ path('search_produit') }}",
+            method: "POST",
+            data: { query: query },
+            success: function(response) {
+              // Hide existing products section
+              $('.existing-products').hide();
+              $('#searchResults').html(response).show(); // Display search results
+            }
+          });
+        } else {
+          // Show existing products section when search input is empty
+          $('.existing-products').show();
+          $('#searchResults').empty().hide(); // Hide search results container
+        }
+      });
+    });
+  </script>
+
+  <style>
+    /* Add this CSS to your stylesheet */
+    .search-container {
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%; /* Set the search input width to 100% */
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      transition: border-color 0.4s ease;
+      margin-bottom: 15px;
+      background-color: transparent;
+      color:white;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #008152;
+    }
+  </style>
 </body>
 {% endblock %}

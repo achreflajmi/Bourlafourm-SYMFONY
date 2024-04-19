@@ -40,7 +40,7 @@ class Produit
     public ?string $image_prod = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Categorie", inversedBy: "produits")]
-    #[ORM\JoinColumn(name: "nom_categorie", referencedColumnName: "id", nullable: false)]
+    #[ORM\JoinColumn(name: "id_categorie", referencedColumnName: "id", nullable: false)]
     #[Assert\NotBlank(message: "La catégorie est requise")]
 
     public ?Categorie $categorie = null;
