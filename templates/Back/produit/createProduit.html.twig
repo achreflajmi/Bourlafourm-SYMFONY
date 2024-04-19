@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="row page-titles mx-0">
+    <div class="col p-md-0">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Home</a></li>
+        </ol>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                      <h4 class="card-title">Ajouter un produit</h4>
+                <div class="form-validation">
+                    {{ form_start(f, {'attr': {'class': 'form-horizontal'}}) }}
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label" for="val-username">Nom du produit <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            {{ form_widget(f.nom_prod, {'attr': {'class': 'form-control', 'placeholder': 'Entrer le nom du produit'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label" for="val-number">Prix du produit <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            {{ form_widget(f.prix_prod, {'attr': {'class': 'form-control', 'placeholder': 'Entrer le prix du produit'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label" for="val-suggestions">Description du produit<span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            {{ form_widget(f.description_prod, {'attr': {'class': 'form-control', 'placeholder': 'Entrer la description du produit'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label" for="val-range">Quantite du produit<span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            {{ form_widget(f.quantite_prod, {'attr': {'class': 'form-control', 'placeholder': 'Entrer la quantité du produit'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label" for="val-username">Image du produit<span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+ {{ form_label(f.image_prod) }}
+                            {% if f.image_prod.vars.value %}
+                                <img src="{{ asset('/public/assets/' ~ f.image_prod.vars.value) }}" alt="Image du produit" class="img-thumbnail">
+                            {% endif %}
+                            {{ form_widget(f.image_prod, {'attr': {'class': 'form-control'}}) }}
+                             {{ form_errors(f.image_prod, {'attr': {'class': 'text-danger'}}) }}                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label" for="val-skill">Categorie <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            {{ form_label(f.id_categorie) }}
+                            {{ form_widget(f.id_categorie, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(f.id_categorie) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label"><a href="#">Terms &amp; Conditions</a>  <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            <label class="css-control css-control-primary css-checkbox" for="val-terms">
+                                <input type="checkbox" class="css-control-input" id="val-terms" name="val-terms" value="1"> <span class="css-control-indicator"></span> I agree to the terms
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8 ml-auto">
+                         {{ form_widget(f.Ajouter, {'attr': {'class': 'btn btn-primary'}}) }}
+                        </div>
+                    </div>
+                    {{ form_end(f) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

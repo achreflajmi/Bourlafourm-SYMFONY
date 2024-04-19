@@ -1,0 +1,66 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block title %}User
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+	<br><br>
+		{% if app.user %}
+			<div class="mb-3">
+				You are logged in as : 
+			<h5>	{{ app.user.userIdentifier }}</h5>		
+				<a href="{{ path('app_logout')}}" class="btn btn-info">app_logout</a>
+			
+	
+			</div>
+		{% endif %}
+	
+		<center><img style="border-radius: 50%; object-fit: cover;" src="{{ asset('uploads/images/' ~ user.image) }}" width="150px" height="150px"/></center>
+		<br>
+	
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<table class="table">
+					<tbody>
+						<tr>
+							<th>Nom</th>
+							<td>{{ user.name }}</td>
+						</tr>
+						<tr>
+							<th>Prenom</th>
+							<td>{{ user.prenom }}</td>
+						</tr>
+						<tr>
+							<th>Email</th>
+							<td>{{ user.email }}</td>
+						</tr>
+					</tbody>
+				</td>
+
+			</tr>
+			<tr>
+				<th>Roles</th>
+				<td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div>
+			
+				
+	
+		<br>
+			<center>
+			<a class="btn btn-primary" href="/guest/edit">
+				edit profil</a>
+		</center>
+</div></div></div><div class="row justify-content-center"><div class="col-md-8"></div></div></div>
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1 class="text-center mb-4">Sign up</h1>
+
+  <div class="row justify-content-center">
+    <!-- Déplacement de l'image à gauche et ajout de styles -->
+    <div class="col-md-6 order-md-2">
+      <div class="hero overlay image-cadre" style="background-image: url('assets/images/background.jpg');">
+      </div>
+    </div>
+
+<style>
+/* Styles pour le cadre de l'image */
+.image-cadre {
+    border: 3px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    background: none;
+}
+.hero.overlay:before {
+    content: none;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    right: 0;
+    bo
+    ttom: 0;
+}
+.form-control {
+    height: 43px;
+    border-radius: 4px;
+    background: none;
+    border-width: 1px;
+    color: #b73f3f !important;
+    border-color: rgba(255, 255, 255, 0.2);
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+</style>
+
+    <!-- Formulaire déplacé à droite -->
+    <div class="col-md-6 order-md-1">
+  
+
+
+       {{ form_start(registrationForm, {attr: {novalidate: 'novalidate'}}) }}
+        {{ form_row(registrationForm.name, {
+            'attr': {
+                'class': 'form-control mb-3',
+                'placeholder': 'Nom'
+            }
+        }) }}
+        {{ form_row(registrationForm.prenom, {
+            'attr': {
+                'class': 'form-control mb-3',
+                'placeholder': 'Prenom'
+            }
+        }) }}
+        {{ form_row(registrationForm.dateN, {
+    'label': 'Date de naissance',
+    'widget': 'single_text',
+    'attr': {
+        'class': 'form-control mb-3',
+        'placeholder': 'Date de naissance'
+    }
+}) }}
+
+        {{ form_row(registrationForm.email, {
+            'attr': {
+                'class': 'form-control mb-3',
+                'placeholder': 'Email'
+            }
+        }) }}
+        {{ form_row(registrationForm.plainPassword, {
+            'label': 'Password',
+            'attr': {
+                'class': 'form-control mb-3',
+                'placeholder': 'Password'
+            }
+        }) }}
+        {{ form_row(registrationForm.image, {
+            'label': 'Image',
+            'attr': {
+                'class': 'form-control mb-3',
+                'placeholder': 'Image'
+            }
+        }) }}
+        <div class="form-check mb-5">
+          {{ form_widget(registrationForm.agreeTerms, {
+              'attr': {
+                  'class': 'form-check-input'
+              }
+          }) }}
+          {{ form_label(registrationForm.agreeTerms, 'I agree to the terms of service', {
+              'label_attr': {
+                  'class': 'form-check-label'
+              }
+          }) }}
+        </div>
+        <div id="champs_sportif" style="display: none;">
+      {{ form_row(registrationForm.poinds_sportif, {
+    'attr': {
+        'class': 'form-control mb-3',
+        'placeholder': 'Poids sportif'
+    }
+}) }}
+
+{{ form_row(registrationForm.taille_sportif, {
+    'attr': {
+        'class': 'form-control mb-3',
+        'placeholder': 'Taille sportif'
+    }
+}) }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block mb-3">Register</button>
+  
+      {{ form_end(registrationForm) }}
+
+  
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var roleSelect = document.querySelector('select[name="registration_form[roles]"]');
+    var champsSportif = document.getElementById('champs_sportif');
+
+    roleSelect.addEventListener('change', function() {
+        champsSportif.style.display = this.value === 'ROLE_SPORTIF' ? 'block' : 'none';
+    });
+
+    roleSelect.dispatchEvent(new Event('change'));
+});
+</script>
+  
+{% endblock %}
