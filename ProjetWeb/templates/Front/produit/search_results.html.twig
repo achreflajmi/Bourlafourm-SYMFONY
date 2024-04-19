@@ -1,0 +1,31 @@
+{% if results %}
+
+  <div class="row2">
+    {% for produit in results %}
+      <div class="col-lg-4 mb-4">
+        <div class="custom-media d-block">
+          <div class="img mb-4">
+            {% if produit.getImageProd() %}
+              <a href="single.html">
+                <img src="{{ asset('assets/' ~ produit.getImageProd()) }}" alt="Image du produit" class="img-fluid">
+              </a>
+            {% else %}
+              No Image
+            {% endif %}
+          </div>
+          <div class="text">
+            <span class="meta">{{ produit.prix_prod }}</span>
+            <h3 class="mb-4"><a href="#">{{ produit.nomProd }}</a></h3>
+            <p style="color: #fff;">{{ produit.description_prod }}</p>
+            <p><a href="#" style="color: #008152;">{{ produit.getCategorie().getNomCategorie() }}</a></p>
+            <a href="{{ path('ajouterPanier', {'idProduit': produit.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
+              Ajouter au panier
+            </a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No results found.</p>
+{% endif %}
