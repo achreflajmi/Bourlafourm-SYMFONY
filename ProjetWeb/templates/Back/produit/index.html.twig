@@ -57,14 +57,19 @@
               </tr>
               {% endfor %}
             </tbody>
-            <a href="{{ path('tri') }}">
-             <button type="button" style="float: left;padding: 10px;margin-right: 10px;" class="btn btn-outline-info">tri croissant</button>
-                </a>
-              <a href="{{ path('trid') }}">
-              <button type="button" style="float: left;padding: 10px;" class="btn btn-outline-info">tri decroissant</button>
-             </a>
           </table>
+            <a href="{{ path('tri') }}" >
+             <button type="button" style="float: left;padding: 10px;margin-right: 10px;" class="btn btn-primary btn-sm">tri croissant</button>
+                </a>
+              <a href="{{ path('trid') }}" class="btn btn-primary btn-sm">
+              <button type="button" style="float: left;padding: 10px;" class="btn btn-primary btn-sm">tri décroissant</button>
+             </a>
+        <a href="{{ path('stat') }}" class="btn btn-primary btn-sm">
+    <button type="button" style="padding: 10px;" class="btn btn-primary btn-sm">Statistics</button>
+</a>
+
         </div>
+        
       </div>
     </div>
   </div>

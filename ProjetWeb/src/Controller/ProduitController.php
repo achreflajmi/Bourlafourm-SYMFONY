@@ -32,7 +32,7 @@ class ProduitController extends AbstractController
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            1
+            6
         );
         return $this->render('Front/produit/index.html.twig', [
            'pagination' => $pagination
@@ -205,6 +205,42 @@ class ProduitController extends AbstractController
             'p' => $produit,
         ]);
     }
+
+    #[Route('/AfficherProduit/stat', name: 'stat', methods: ['POST', 'GET'])]
+public function statisticsByCategory(\App\Repository\ProduitRepository $repo, Request $request): Response
+{
+    // Fetch all distinct category names from the Categorie table
+    $categories = $repo->getAllCategoryNames();
+
+    // Initialize an empty array to store category statistics
+    $categoryStatistics = [];
+
+    // Calculate total count of products
+    $total = 0;
+
+    // Calculate count and percentage for each category
+    foreach ($categories as $category) {
+        $count = $repo->countByNomCategorie($category['nom_categorie']);
+        $total += $count;
+        $categoryStatistics[$category['nom_categorie']] = $count;
+    }
+
+    // Calculate percentages if total is not zero
+    if ($total != 0) {
+        foreach ($categoryStatistics as $category => &$count) {
+            $percentage = round(($count / $total) * 100);
+            $count = [
+                'count' => $count,
+                'percentage' => $percentage,
+            ];
+        }
+    }
+
+    return $this->render('/Back/produit/stat.html.twig', [
+        'categoryStatistics' => $categoryStatistics,
+    ]);
+}
+
     
 }
 
