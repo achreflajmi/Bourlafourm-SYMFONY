@@ -43,7 +43,25 @@ class ProduitRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    
+    public function countByNomCategorie($nomCategorie)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->leftJoin('p.categorie', 'c')
+            ->where('c.nom_categorie = :nomCategorie')
+            ->setParameter('nomCategorie', $nomCategorie)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function getAllCategoryNames()
+    {
+        return $this->createQueryBuilder('p')
+            ->select('DISTINCT c.nom_categorie')
+            ->leftJoin('p.categorie', 'c')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Produit[] Returns an array of Produit objects
 //     */
