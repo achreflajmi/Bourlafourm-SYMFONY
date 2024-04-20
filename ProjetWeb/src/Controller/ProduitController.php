@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Knp\Component\Pager\PaginatorInterface;
 
 class ProduitController extends AbstractController
 {
@@ -24,12 +25,17 @@ class ProduitController extends AbstractController
         ]);
     }
     #[Route('/produits', name: 'displayFront')]
-    public function indexFront(): Response
+    public function indexFront(Request $request, PaginatorInterface $paginator): Response
     {
-        $produits= $this->getDoctrine()->getManager()->getRepository(Produit::class)->findAll();
-        
+        $query = $this->getDoctrine()->getManager()->getRepository(Produit::class)->createQueryBuilder('p');
+    
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            1
+        );
         return $this->render('Front/produit/index.html.twig', [
-           'p' => $produits 
+           'pagination' => $pagination
         ]);
     }
     #[Route('/admin', name: 'display_produitAdmin')]
@@ -180,7 +186,25 @@ class ProduitController extends AbstractController
             'results' => $results,
         ]);
     }
-    
+    #[Route('/AfficherProduit/tricroi', name: 'tri', methods: ['GET', 'POST'])]
+    public function triCroissant(\App\Repository\ProduitRepository $pr): Response
+    {
+        $produit = $pr->findAllSorted();
+
+        return $this->render('Back/produit/index.html.twig', [
+            'p' => $produit,
+        ]);
+    }
+
+    #[Route('/AfficherProduit/tridesc', name: 'trid', methods: ['GET', 'POST'])]
+    public function triDescroissant(\App\Repository\ProduitRepository $pr): Response
+    {
+        $produit = $pr->findAllSorted1();
+
+        return $this->render('Back/produit/index.html.twig', [
+            'p' => $produit,
+        ]);
+    }
     
 }
 

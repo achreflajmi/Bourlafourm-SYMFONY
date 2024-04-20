@@ -42,7 +42,7 @@
       </div>
 
       <div class="row existing-products">
-        {% for produit in p %}
+        {% for produit in pagination %}
         <div class="col-lg-4 mb-4">
           <div class="custom-media d-block">
             <div class="img mb-4">
@@ -67,20 +67,15 @@
         </div>
         {% endfor %}
       </div>
-
-    </div>
-
-    <div class="row justify-content-center">
-      <div class="col-lg-7 text-center">
-        <div class="custom-pagination">
-          <a href="#" style="color: #008152;">1</a>
-          <span style="color: #008152;">2</span>
-          <a href="#" style="color: #008152;">3</a>
-          <a href="#" style="color: #008152;">4</a>
-          <a href="#" style="color: #008152;">5</a>
+      <div class="row justify-content-center">
+        <div class="col-lg-7 text-center">
+          <div class="custom-pagination justify-content-center">
+            {{ knp_pagination_render(pagination) }}
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -94,28 +89,24 @@
             method: "POST",
             data: { query: query },
             success: function(response) {
-              // Hide existing products section
               $('.existing-products').hide();
-              $('#searchResults').html(response).show(); // Display search results
+              $('#searchResults').html(response).show();
             }
           });
         } else {
-          // Show existing products section when search input is empty
           $('.existing-products').show();
-          $('#searchResults').empty().hide(); // Hide search results container
+          $('#searchResults').empty().hide();
         }
       });
     });
   </script>
-
   <style>
-    /* Add this CSS to your stylesheet */
     .search-container {
       position: relative;
     }
 
     .search-input {
-      width: 100%; /* Set the search input width to 100% */
+      width: 100%;
       padding: 10px 15px;
       border-radius: 5px;
       border: 1px solid #ccc;
@@ -123,12 +114,45 @@
       transition: border-color 0.4s ease;
       margin-bottom: 15px;
       background-color: transparent;
-      color:white;
+      color: white;
     }
 
     .search-input:focus {
       outline: none;
       border-color: #008152;
+    }
+
+    .custom-pagination {
+      margin-top: 20px;
+    }
+
+    .custom-pagination ul.pagination {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+    }
+
+    .custom-pagination ul.pagination li {
+      margin: 0 5px;
+    }
+
+    .custom-pagination ul.pagination li.active a {
+      background-color: #008152;
+      color: white;
+      border-color: #008152;
+    }
+
+    .custom-pagination ul.pagination li a {
+      padding: 5px 10px;
+      text-decoration: none;
+      color: #008152;
+      border: 1px solid #008152;
+      border-radius: 3px;
+    }
+
+    .custom-pagination ul.pagination li a:hover {
+      background-color: #008152;
+      color: white;
     }
   </style>
 </body>

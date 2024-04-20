@@ -57,6 +57,12 @@
               </tr>
               {% endfor %}
             </tbody>
+            <a href="{{ path('tri') }}">
+             <button type="button" style="float: left;padding: 10px;margin-right: 10px;" class="btn btn-outline-info">tri croissant</button>
+                </a>
+              <a href="{{ path('trid') }}">
+              <button type="button" style="float: left;padding: 10px;" class="btn btn-outline-info">tri decroissant</button>
+             </a>
           </table>
         </div>
       </div>
@@ -75,18 +81,13 @@
                 method: "POST",
                 data: { query: query },
                 success: function(response) {
-                    // Clear the search results container before displaying new results
                     $('#searchResults').empty();
-                    // Hide the existing products table
                     $('#existingProductsTable').hide();
-                    // Display search results
                     $('#searchResults').html(response).show();
                 }
             });
         } else {
-            // Clear the search results container when search input is empty
             $('#searchResults').empty();
-            // Show existing products table
             $('#existingProductsTable').show();
         }
     });

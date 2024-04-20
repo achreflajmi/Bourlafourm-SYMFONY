@@ -28,7 +28,21 @@ class ProduitRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+    public function findAllSorted(): array
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->orderBy('p.prix_prod', 'ASC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+    public function findAllSorted1(): array
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->orderBy('p.prix_prod', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     
 //    /**
 //     * @return Produit[] Returns an array of Produit objects
