@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Entity\Produit;
 use App\Entity\Categorie;
 use App\Form\ProduitType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,8 +26,10 @@ class ProduitController extends AbstractController
         ]);
     }
     #[Route('/produits', name: 'displayFront')]
-    public function indexFront(Request $request, PaginatorInterface $paginator): Response
+    public function indexFront(Request $request, PaginatorInterface $paginator, UserRepository $userRepository): Response
     {
+        $userId = 1;
+        $user = $userRepository->find($userId);
         $query = $this->getDoctrine()->getManager()->getRepository(Produit::class)->createQueryBuilder('p');
     
         $pagination = $paginator->paginate(
@@ -35,7 +38,8 @@ class ProduitController extends AbstractController
             6
         );
         return $this->render('Front/produit/index.html.twig', [
-           'pagination' => $pagination
+           'pagination' => $pagination,
+           'user' => $user,
         ]);
     }
     #[Route('/admin', name: 'display_produitAdmin')]

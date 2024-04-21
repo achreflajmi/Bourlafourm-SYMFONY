@@ -42,30 +42,36 @@
       </div>
 
       <div class="row existing-products">
-        {% for produit in pagination %}
-        <div class="col-lg-4 mb-4">
-          <div class="custom-media d-block">
+    {% for produit in pagination %}
+    <div class="col-lg-4 mb-4">
+        <div class="custom-media d-block">
             <div class="img mb-4">
-              {% if produit.getImageProd() %}
-              <a href="single.html">
-                <img src="{{ asset('assets/' ~ produit.getImageProd()) }}" alt="Image du produit" class="img-fluid">
-              </a>
-              {% else %}
-              No Image
-              {% endif %}
+                {% if produit.getImageProd() %}
+                    <a href="single.html">
+                        <img src="{{ asset('assets/' ~ produit.getImageProd()) }}" alt="Image du produit" class="img-fluid">
+                    </a>
+                {% else %}
+                    No Image
+                {% endif %}
             </div>
             <div class="text">
-              <span class="meta">{{ produit.prix_prod }}</span>
-              <h3 class="mb-4"><a href="#">{{ produit.nomProd }}</a></h3>
-              <p style="color: #fff;">{{ produit.description_prod }}</p>
-              <p><a href="#" style="color: #008152;">{{ produit.getCategorie().getNomCategorie() }}</a></p>
-              <a href="{{ path('ajouterPanier', {'idProduit': produit.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
-                Ajouter au panier
-              </a>
+                <span class="meta">{{ produit.prix_prod }}</span>
+                <h3 class="mb-4"><a href="#">{{ produit.nomProd }}</a></h3>
+                <p style="color: #fff;">{{ produit.description_prod }}</p>
+                <p><a href="#" style="color: #008152;">{{ produit.getCategorie().getNomCategorie() }}</a></p>
+               {% if user is not null %}
+    <a href="{{ path('ajouterPanier', {'idProduit': produit.id, 'userId': user.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
+        Ajouter au panier
+    </a>
+{% else %}
+    <!-- Handle the case where user is null -->
+    <p>Utilisateur non trouvé</p>
+{% endif %}
             </div>
-          </div>
         </div>
-        {% endfor %}
+    </div>
+{% endfor %}
+
       </div>
       <div class="row justify-content-center">
         <div class="col-lg-7 text-center">
