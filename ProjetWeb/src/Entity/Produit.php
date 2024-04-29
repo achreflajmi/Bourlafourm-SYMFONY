@@ -11,9 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Produit
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+#[ORM\GeneratedValue]
+#[ORM\Column(type: 'integer')]
+private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le nom est requis")]
@@ -24,6 +24,8 @@ class Produit
     #[Assert\NotBlank(message: "Le prix est requis")]
     #[Assert\Type(type: "float", message: "Le prix doit être un nombre décimal")]
     public ?float $prix_prod = null;
+    #[ORM\Column(type: "float")]
+    public ?float $rating = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "La description est requise")]
@@ -71,7 +73,17 @@ class Produit
 
         return $this;
     }
+    public function getRating(): ?float
+    {
+        return $this->rating;
+    }
 
+    public function setRating(?float $rating): self
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
     public function getPrixProd(): ?float
     {
         return $this->prix_prod;
