@@ -2,7 +2,21 @@
 
 {% block body %}
 <body>
+<style>
 
+.alert-success:hover {
+    opacity: 0; /* Hide the alert on hover */
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fadeOut {
+  animation: fadeOut 1s ease forwards;
+}
+</style>
   <div class="site-wrap">
 
     <div class="site-mobile-menu site-navbar-target">
@@ -33,46 +47,53 @@
       </div>
 
       <div class="row">
-        <div class="col-md-12"> <!-- Expand the search input to take the entire width -->
-          <div class="search-container"> <!-- New container for search input -->
-            <input type="text" id="searchInput" class="search-input" placeholder="Search..."> <!-- Apply search-input class -->
+        <div class="col-md-12"> 
+          <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search..."> 
           </div>
           <div id="searchResults"></div>
         </div>
       </div>
 
       <div class="row existing-products">
-    {% for produit in pagination %}
-    <div class="col-lg-4 mb-4">
-        <div class="custom-media d-block">
-            <div class="img mb-4">
-                {% if produit.getImageProd() %}
-                    <a href="single.html">
-                        <img src="{{ asset('assets/' ~ produit.getImageProd()) }}" alt="Image du produit" class="img-fluid">
-                    </a>
-                {% else %}
-                    No Image
-                {% endif %}
-            </div>
-            <div class="text">
-                <span class="meta">{{ produit.prix_prod }}</span>
-                <h3 class="mb-4"><a href="#">{{ produit.nomProd }}</a></h3>
-                <p style="color: #fff;">{{ produit.description_prod }}</p>
-                <p><a href="#" style="color: #008152;">{{ produit.getCategorie().getNomCategorie() }}</a></p>
-               {% if user is not null %}
-    <a href="{{ path('ajouterPanier', {'idProduit': produit.id, 'userId': user.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
-        Ajouter au panier
-    </a>
-{% else %}
-    <!-- Handle the case where user is null -->
-    <p>Utilisateur non trouvé</p>
-{% endif %}
+        {% for produit in pagination %}
+        <div class="col-lg-4 mb-4">
+            <div class="custom-media d-block">
+                <div class="img mb-4">
+                    {% if produit.getImageProd() %}
+                        <a href="single.html">
+                            <img src="{{ asset('assets/' ~ produit.getImageProd()) }}" alt="Image du produit" class="img-fluid">
+                        </a>
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </div>
+                <div class="text">
+                    <span class="meta">{{ produit.prix_prod }}</span>
+                    <h3 class="mb-4"><a href="#">{{ produit.nomProd }}</a></h3>
+                    <p style="color: #fff;">{{ produit.description_prod }}</p>
+                    <p><a href="#" style="color: #008152;">{{ produit.getCategorie().getNomCategorie() }}</a></p>
+                    <!-- Rating stars -->
+                    <div class="rating-stars" data-product-id="{{ produit.id }}">
+                        {% for i in 1..5 %}
+                            <i class="star fas fa-star text-warning" data-rating="{{ i }}"></i>
+                        {% endfor %}
+                    </div>
+                    <p class="average-rating">Average Rating: <span>{{ produit.rating }}</span></p>
+                    {% if user is not null %}
+                        <a href="{{ path('ajouterPanier', {'idProduit': produit.id, 'userId': user.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
+                            Ajouter au panier
+                        </a>
+                    {% else %}
+                        <!-- Handle the case where user is null -->
+                        <p>Utilisateur non trouvé</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
-{% endfor %}
-
+        {% endfor %}
       </div>
+
       <div class="row justify-content-center">
         <div class="col-lg-7 text-center">
           <div class="custom-pagination justify-content-center">
@@ -84,28 +105,83 @@
 
   </div>
 
+  {% for flash_message in app.session.flashbag.get('successPaiement') %}
+  <div id="myAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="position: fixed; top: 105px; left: 50%; transform: translateX(-50%); z-index: 9999; padding: 10px 20px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; color: #fff; background-color: #008152; border-color: #fff; transition: opacity 0.5s ease; cursor: pointer;">
+    {{ flash_message }}
+  </div>
+  {% endfor %}
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('#searchInput').on('input', function() {
-        var query = $(this).val().trim();
-        if (query.length > 0) {
-          $.ajax({
-            url: "{{ path('search_produit') }}",
+<script>
+$(document).ready(function() {
+    $('.rating-stars .star').on('click', function() {
+        var productId = $(this).closest('.rating-stars').data('product-id');
+        var rating = parseFloat($(this).data('rating'));
+        var $averageRatingSpan = $(this).closest('.text').find('.average-rating span');
+
+        // Calculate average rating
+        var average = parseFloat($averageRatingSpan.text());
+        var totalRatings = parseFloat($('.rating-stars .star.selected').length);
+        var totalRatingSum = average * totalRatings;
+
+        // Update totalRatingSum with the new rating
+        totalRatingSum += rating;
+        totalRatings++;
+
+        // Calculate new average rating
+        average = totalRatingSum / totalRatings;
+
+        // Update average rating display
+        $averageRatingSpan.text(average.toFixed(1));
+
+        // Send AJAX request to update rating in the database
+        $.ajax({
+            url: "/update-rating/" + productId,
             method: "POST",
-            data: { query: query },
+            data: { rating: rating }, // Send rating as data in the request body
             success: function(response) {
-              $('.existing-products').hide();
-              $('#searchResults').html(response).show();
+                console.log('Server Response:', response); // Debugging statement
+                if (!response.success) {
+                    console.error('Failed to update rating'); // Debugging statement
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating rating:', error);
             }
-          });
-        } else {
-          $('.existing-products').show();
-          $('#searchResults').empty().hide();
+        });
+    });
+});
+</script>
+
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#searchInput').on('input', function() {
+    var query = $(this).val().trim();
+    if (query.length > 0) {
+      $.ajax({
+        url: "{{ path('search_produit') }}",
+        method: "POST",
+        data: { query: query },
+        success: function(response) {
+          $('.existing-products').hide();
+          $('#searchResults').html(response).show();
         }
       });
-    });
-  </script>
+    } else {
+      $('.existing-products').show();
+      $('#searchResults').empty().hide();
+    }
+  });
+
+       
+});
+
+setTimeout(function() {
+  $('#myAlert').addClass('fadeOut');
+}, 2000);
+</script>
+
   <style>
     .search-container {
       position: relative;
@@ -161,5 +237,27 @@
       color: white;
     }
   </style>
+
+  <style>
+    .rating-stars {
+      display: flex;
+      cursor: pointer;
+    }
+
+    .star {
+      margin-right: 5px;
+      font-size: 24px;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .star.selected {
+      color: gold; /* Change color for selected stars */
+    }
+
+    .star:hover {
+      transform: scale(1.2); /* Increase the size on hover */
+    }
+  </style>
+
 </body>
 {% endblock %}

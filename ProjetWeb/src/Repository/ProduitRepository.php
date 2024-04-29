@@ -86,4 +86,22 @@ class ProduitRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function calculateAverageRating($productId)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('AVG(p.rating) AS averageRating')
+            ->where('p.id = :productId')
+            ->setParameter('productId', $productId)
+            ->getQuery();
+
+        $result = $query->getOneOrNullResult();
+
+        // If there are no ratings, return null
+        if ($result === null) {
+            return null;
+        }
+
+        // Return the average rating
+        return $result['averageRating'];
+    }
 }

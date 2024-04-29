@@ -18,7 +18,7 @@
             <h3 class="mb-4"><a href="#">{{ produit.nomProd }}</a></h3>
             <p style="color: #fff;">{{ produit.description_prod }}</p>
             <p><a href="#" style="color: #008152;">{{ produit.getCategorie().getNomCategorie() }}</a></p>
-            <a href="{{ path('ajouterPanier', {'idProduit': produit.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
+            <a href="{{ path('ajouterPanier', {'idProduit': produit.id, 'userId': user.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
               Ajouter au panier
             </a>
           </div>

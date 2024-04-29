@@ -32,29 +32,31 @@
       <div class="row">
         {% set totalPanier = 0 %}
         {% set productDetails = [] %}
-        {% for article in articles %}
-        <div class="col-lg-6 mb-4">
-            <div class="custom-media d-flex">
-                <div class="img mr-4">
-                    <img src="{{ asset('assets/' ~ article.getProduit().getImageProd() ) }}" alt="Image du produit" class="img-fluid">
-                </div>
-                <div class="text">
-                    <h3 class="mb-1">{{ article.getProduit().getNomProd() }}</h3>
-                    <p class="meta">Prix: {{ article.getProduit().getPrixProd() }} TND</p>
-                    <p class="meta">Quantité: {{ article.getQuantitePanier() }}</p>
-<a href="{{ path('supprimer_du_panier', {'id': article.getId()}) }}" class="btn py-3 px-4 mr-3 btn-primary" ">
-  Supprimer du panier
-</a>
-                </div>
-            </div>
-            {% set totalPanier = totalPanier + (article.getProduit().getPrixProd() * article.getQuantitePanier()) %}
-            {% set productDetails = productDetails|merge([{name: article.getProduit().getNomProd(), price: article.getProduit().getPrixProd(), quantity: article.getQuantitePanier()}]) %}
+   {% for article in articles %}
+<div class="col-lg-6 mb-4">
+    <div class="custom-media d-flex">
+        <div class="img mr-4">
+            <img src="{{ asset('assets/' ~ article.getProduit().getImageProd() ) }}" alt="Image du produit" class="img-fluid">
         </div>
-        {% else %}
-        <div class="col-lg-12 text-center">
-            <p>Votre panier est vide.</p>
+        <div class="text">
+            <h3 class="mb-1">{{ article.getProduit().getNomProd() }}</h3>
+            <p class="meta">Prix: {{ article.getProduit().getPrixProd() }} TND</p>
+            <p class="meta">Quantité: 
+                <button class="btn btn-sm btn-primary" onclick="decrementQuantity({{ article.getId() }}, {{ article.getProduit().getPrixProd() }})">-</button>
+                <span id="quantity-{{ article.getId() }}">{{ article.getQuantitePanier() }}</span>
+                <button class="btn btn-sm btn-primary" onclick="incrementQuantity({{ article.getId() }}, {{ article.getProduit().getPrixProd() }})">+</button>
+            </p>
+            <a href="{{ path('supprimer_du_panier', {'id': article.getId()}) }}" class="btn py-3 px-4 mr-3 btn-primary">Supprimer du panier</a>
         </div>
-        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="col-lg-12 text-center">
+    <p>Votre panier est vide.</p>
+</div>
+{% endfor %}
+
+
       <div class="col-12" style="background-color: transparent; border: 2px solid #008152; padding: 20px; color:white;">
   <h3 class="heading">Récapitulatif du Panier</h3>
   <ul class="container site-section" style="list-style-type: none; padding: 0;">
@@ -69,7 +71,7 @@
     {% endfor %}
     <li class="d-flex justify-content-between" style="border-bottom: none; padding: 10px 0;">
       <span>Total (TND)</span>
-      <strong style="color: #fff;">{{ totalPanier }} TND</strong>
+<strong id="total-price" style="color: #fff;">{{ totalPanier }} TND</strong>
     </li>
   </ul>
 </div>
@@ -82,5 +84,49 @@
       <!-- Footer content -->
     </footer>
   </div>
+<script>
+    function incrementQuantity(articleId, articlePrice) {
+        var quantitySpan = document.getElementById('quantity-' + articleId);
+        var currentQuantity = parseInt(quantitySpan.textContent);
+        quantitySpan.textContent = currentQuantity + 1;
+        
+        // Update total price
+        updateTotalPrice(articlePrice);
+    }
+
+    function decrementQuantity(articleId, articlePrice) {
+        var quantitySpan = document.getElementById('quantity-' + articleId);
+        var currentQuantity = parseInt(quantitySpan.textContent);
+        if (currentQuantity > 0) {
+            quantitySpan.textContent = currentQuantity - 1;
+            
+            // If quantity becomes zero, remove the item
+            if (currentQuantity === 1) {
+                removeItem(articleId, articlePrice);
+            } else {
+                // Update total price
+                updateTotalPrice(-articlePrice);
+            }
+        }
+    }
+
+    function updateTotalPrice(articlePrice, deltaQuantity) {
+        var totalPriceElement = document.getElementById('total-price');
+        var currentTotalPrice = parseFloat(totalPriceElement.textContent);
+        var newTotalPrice = currentTotalPrice + (articlePrice * deltaQuantity);
+        totalPriceElement.textContent = newTotalPrice.toFixed(2);
+    }
+
+    function removeItem(articleId, articlePrice) {
+        // You can use AJAX to call your controller action to remove the item from the cart
+        // For simplicity, I'm redirecting to the remove item action directly
+        window.location.href = '{{ path('supprimer_du_panier', {'id': '__articleId__'}) }}'.replace('__articleId__', articleId);
+        
+        // Update total price
+        updateTotalPrice(-articlePrice, 0);
+    }
+</script>
+
+
 </body>
 {% endblock %}

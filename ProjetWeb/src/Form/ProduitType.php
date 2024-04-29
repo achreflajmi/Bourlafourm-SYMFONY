@@ -44,7 +44,8 @@ class ProduitType extends AbstractType
                 'placeholder' => 'Choose a category',
                 'attr' => ['class' => 'form-control'],
             ])
-            
+            ->add('rating')
+
             ->add('Ajouter', SubmitType::class);
             
         $builder->get('image_prod')->addModelTransformer(new class() implements DataTransformerInterface {
