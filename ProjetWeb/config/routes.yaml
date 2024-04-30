@@ -5,3 +5,11 @@ app:
     resource: '../src/Controller/'
     type: annotation
 
+increment_quantity:
+    path: '/increment_quantity/{articleId}'
+    controller: 'App\Controller\PanierController::incrementQuantity'
+    methods: ['POST']
+decrement_quantity:
+    path: '/decrement_quantity/{articleId}'
+    controller: 'App\Controller\PanierController::decrementQuantity'
+    methods: ['POST']

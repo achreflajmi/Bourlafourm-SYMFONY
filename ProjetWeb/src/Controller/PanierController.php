@@ -26,65 +26,61 @@ class PanierController extends AbstractController
     }
     #[Route('/panier', name: 'app_panier')]
     public function AfficherPanier(EntityManagerInterface $em, UserRepository $userRepository): Response
-{ 
-    $articlesPanier = $this->getDoctrine()->getManager()->getRepository(Panier::class)->findAll();
-
-    $userId = 1;
-    $user = $userRepository->find($userId);
-
-    $totalPanier = 0;
-    foreach ($articlesPanier as $article) {
-        $totalPanier += $article->getProduit()->getPrixProd() * $article->getQuantitePanier();
+    { 
+        $articlesPanier = $this->getDoctrine()->getManager()->getRepository(Panier::class)->findAll();
+    
+        $userId = 1;
+        $user = $userRepository->find($userId);
+    
+        $totalPanier = 0;
+    
+        foreach ($articlesPanier as $article) {
+            $totalPanier += $article->getTotalPanier(); // Accumulate total price of each item
+        }
+    
+        return $this->render('Front/panier/index.html.twig', [
+            'articles' => $articlesPanier,
+            'totalPanier' => $totalPanier,
+            'user' => $user, 
+        ]);
     }
-
-    // Mise à jour du totalPanier pour chaque article en fonction de sa quantité
-    // Si le totalPanier est une propriété de l'entité Panier, utilisez plutôt cette boucle pour mettre à jour les totaux de chaque panier.
-
-    // foreach ($articlesPanier as $article) {
-    //     $articleTotal = $article->getProduit()->getPrixProd() * $article->getQuantitePanier();
-    //     $article->setTotalPanier($articleTotal);
-    //     $totalPanier += $articleTotal;
-    // }
-
-    return $this->render('Front/panier/index.html.twig', [
-        'articles' => $articlesPanier,
-        'totalPanier' => $totalPanier,
-        'user' => $user, 
-    ]);
-}
+    
 
     
     
 
     #[Route('/ajouterPanier/{idProduit}/{userId}', name: 'ajouterPanier')]
-public function ajouterAuPanier($idProduit, $userId, EntityManagerInterface $em, UserRepository $userRep, ProduitRepository $pr)
-{
-    $user = $userRep->find($userId);
+    public function ajouterAuPanier($idProduit, $userId, EntityManagerInterface $em, UserRepository $userRep, ProduitRepository $pr)
+    {
+        $user = $userRep->find($userId);
+        $produit = $pr->find($idProduit);
+        
+        if (!$produit) {
+            throw $this->createNotFoundException('Le produit demandé n\'existe pas');
+        }
+        
+        $panier = $em->getRepository(Panier::class)->findOneBy(['produit' => $produit, 'user' => $user]);
     
-    $produit = $pr->find($idProduit);
-    
-    if (!$produit) {
-        throw $this->createNotFoundException('Le produit demandé n\'existe pas');
+        if ($panier) {
+            // If the item already exists in the cart, increment its quantity
+            $quantitePanier = $panier->getQuantitePanier();
+            $panier->setQuantitePanier($quantitePanier + 1);
+            $panier->setTotalPanier($panier->getTotalPanier() + $produit->getPrixProd()); 
+        } else {
+            // If the item doesn't exist in the cart, create a new entry
+            $panier = new Panier();
+            $panier->setProduit($produit);
+            $panier->setUser($user);
+            $panier->setQuantitePanier(1); // Initially set to 1
+            $panier->setTotalPanier($produit->getPrixProd());
+        }
+        
+        $em->persist($panier);
+        $em->flush();
+        
+        return $this->redirectToRoute('app_panier');
     }
     
-    $panier = $em->getRepository(Panier::class)->findOneBy(['produit' => $produit, 'user' => $user]);
-
-    if ($panier) {
-        $panier->setQuantitePanier($panier->getQuantitePanier() + 1);
-    } else {
-        $panier = new Panier();
-        $panier->setProduit($produit);
-        $panier->setUser($user);
-        $panier->setQuantitePanier(1); 
-        $panier->setTotalPanier($panier->getProduit()->getPrixProd());
-
-    }
-    
-    $em->persist($panier);
-    $em->flush();
-    
-    return $this->redirectToRoute('app_panier');
-}
 
     
     
@@ -171,4 +167,39 @@ public function emptyCart($userId)
 
     $this->entityManager->flush();
 }
+public function incrementQuantity($articleId)
+{
+    $panier = $this->entityManager->getRepository(Panier::class)->find($articleId);
+
+    if (!$panier) {
+        throw new \Exception('Panier item not found');
+    }
+
+    $quantitePanier = $panier->getQuantitePanier();
+    $panier->setQuantitePanier($quantitePanier + 1);
+
+    $this->entityManager->flush();
+
+    return new JsonResponse(['success' => true]);
+}
+
+public function decrementQuantity($articleId)
+{
+    $panier = $this->entityManager->getRepository(Panier::class)->find($articleId);
+
+    if (!$panier) {
+        throw new \Exception('Panier item not found');
+    }
+
+    $quantitePanier = $panier->getQuantitePanier();
+
+    if ($quantitePanier > 0) {
+        $panier->setQuantitePanier($quantitePanier - 1);
+        $this->entityManager->flush();
+    }
+
+    return new JsonResponse(['success' => true]);
+}
+
+
 }

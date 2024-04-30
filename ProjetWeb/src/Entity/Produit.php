@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 use App\Entity\Categorie;
-
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,8 +25,6 @@ private ?int $id = null;
     #[Assert\NotBlank(message: "Le prix est requis")]
     #[Assert\Type(type: "float", message: "Le prix doit être un nombre décimal")]
     public ?float $prix_prod = null;
-    #[ORM\Column(type: "float")]
-    public ?float $rating = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "La description est requise")]
@@ -46,6 +45,10 @@ private ?int $id = null;
     #[Assert\NotBlank(message: "La catégorie est requise")]
 
     public ?Categorie $categorie = null;
+
+    #[ORM\OneToMany(targetEntity: Ratings::class, mappedBy: "produit")]
+    private Collection $ratings;
+
 
     public function getCategorie(): ?Categorie
     {
@@ -73,17 +76,7 @@ private ?int $id = null;
 
         return $this;
     }
-    public function getRating(): ?float
-    {
-        return $this->rating;
-    }
-
-    public function setRating(?float $rating): self
-    {
-        $this->rating = $rating;
-
-        return $this;
-    }
+   
     public function getPrixProd(): ?float
     {
         return $this->prix_prod;
@@ -132,5 +125,33 @@ private ?int $id = null;
         return $this;
     }
 
- 
+  public function __construct()
+    {
+        $this->ratings = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|Ratings[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+    public function setRating(?float $rating): self
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function addRating(Ratings $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setProduit($this);
+        }
+
+        return $this;
+    }
+  
 }

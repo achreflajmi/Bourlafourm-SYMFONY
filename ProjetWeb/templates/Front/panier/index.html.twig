@@ -31,52 +31,43 @@
       </div>
       <div class="row">
         {% set totalPanier = 0 %}
-        {% set productDetails = [] %}
-   {% for article in articles %}
-<div class="col-lg-6 mb-4">
-    <div class="custom-media d-flex">
-        <div class="img mr-4">
-            <img src="{{ asset('assets/' ~ article.getProduit().getImageProd() ) }}" alt="Image du produit" class="img-fluid">
-        </div>
-        <div class="text">
-            <h3 class="mb-1">{{ article.getProduit().getNomProd() }}</h3>
-            <p class="meta">Prix: {{ article.getProduit().getPrixProd() }} TND</p>
-            <p class="meta">Quantité: 
-                <button class="btn btn-sm btn-primary" onclick="decrementQuantity({{ article.getId() }}, {{ article.getProduit().getPrixProd() }})">-</button>
-                <span id="quantity-{{ article.getId() }}">{{ article.getQuantitePanier() }}</span>
-                <button class="btn btn-sm btn-primary" onclick="incrementQuantity({{ article.getId() }}, {{ article.getProduit().getPrixProd() }})">+</button>
-            </p>
-            <a href="{{ path('supprimer_du_panier', {'id': article.getId()}) }}" class="btn py-3 px-4 mr-3 btn-primary">Supprimer du panier</a>
-        </div>
-    </div>
-</div>
-{% else %}
-<div class="col-lg-12 text-center">
-    <p>Votre panier est vide.</p>
-</div>
-{% endfor %}
+        {% for article in articles %}
+            <div class="col-lg-6 mb-4">
+                <div class="custom-media d-flex">
+                    <div class="img mr-4">
+                        <img src="{{ asset('assets/' ~ article.getProduit().getImageProd() ) }}" alt="Image du produit" class="img-fluid">
+                    </div>
+                    <div class="text">
+                        <h3 class="mb-1">{{ article.getProduit().getNomProd() }}</h3>
+                        <p class="meta">Prix: {{ article.getProduit().getPrixProd() }} TND</p>
+                        <p class="meta">Quantité: 
+<button class="btn btn-sm btn-primary" onclick="decrementQuantity('{{ article.getId() }}')">-</button>
+                            <span id="quantity-{{ article.getId() }}">{{ article.getQuantitePanier() }}</span>
+<button class="btn btn-sm btn-primary" onclick="incrementQuantity('{{ article.getId() }}')">+</button>
+                        </p>
+                        <a href="{{ path('supprimer_du_panier', {'id': article.getId()}) }}" class="btn py-3 px-4 mr-3 btn-primary">Supprimer du panier</a>
+                    </div>
+                </div>
+            </div>
+            {% set totalPanier = totalPanier + article.getProduit().getPrixProd() * article.getQuantitePanier() %}
+        {% else %}
+            <div class="col-lg-12 text-center">
+                <p>Votre panier est vide.</p>
+            </div>
+        {% endfor %}
 
-
-      <div class="col-12" style="background-color: transparent; border: 2px solid #008152; padding: 20px; color:white;">
-  <h3 class="heading">Récapitulatif du Panier</h3>
-  <ul class="container site-section" style="list-style-type: none; padding: 0;">
-    {% for detail in productDetails %}
-    <li class="d-flex justify-content-between lh-condensed" style="border-bottom: 1px solid #008152; padding: 10px 0;">
-      <div>
-        <h6 class="my-0">{{ detail.name }}</h6>
-        <small style="color: #008152;">Quantité: {{ detail.quantity }}</small>
-      </div>
-      <span  style="color: #fff;">{{ detail.price }} TND</span>
-    </li>
-    {% endfor %}
-    <li class="d-flex justify-content-between" style="border-bottom: none; padding: 10px 0;">
-      <span>Total (TND)</span>
-<strong id="total-price" style="color: #fff;">{{ totalPanier }} TND</strong>
-    </li>
-  </ul>
-</div>
-<a id="sending" href="{{ path('app_stripe') }}">
-								<button type="button" class="btn btn-primary btn-round btn-block" style="margin-top: 12px; margin-left:40%; font-weight:bold;">Commander</button>
+        <div class="col-12" style="background-color: transparent; border: 2px solid #008152; padding: 20px; color:white;">
+            <h3 class="heading">Récapitulatif du Panier</h3>
+            <ul class="container site-section" style="list-style-type: none; padding: 0;">
+                <li class="d-flex justify-content-between" style="border-bottom: none; padding: 10px 0;">
+                    <span>Total (TND)</span>
+                    <strong id="total-price" style="color: #fff;">{{ totalPanier }} TND</strong>
+                </li>
+            </ul>
+        </div>
+        <a id="sending" href="{{ path('app_stripe') }}">
+            <button type="button" class="btn btn-primary btn-round btn-block" style="margin-top: 12px; margin-left:40%; font-weight:bold;">Commander</button>
+        </a>
       </div>
     </div>
 
@@ -84,49 +75,40 @@
       <!-- Footer content -->
     </footer>
   </div>
+
 <script>
-    function incrementQuantity(articleId, articlePrice) {
-        var quantitySpan = document.getElementById('quantity-' + articleId);
-        var currentQuantity = parseInt(quantitySpan.textContent);
-        quantitySpan.textContent = currentQuantity + 1;
-        
-        // Update total price
-        updateTotalPrice(articlePrice);
-    }
-
-    function decrementQuantity(articleId, articlePrice) {
-        var quantitySpan = document.getElementById('quantity-' + articleId);
-        var currentQuantity = parseInt(quantitySpan.textContent);
-        if (currentQuantity > 0) {
-            quantitySpan.textContent = currentQuantity - 1;
-            
-            // If quantity becomes zero, remove the item
-            if (currentQuantity === 1) {
-                removeItem(articleId, articlePrice);
-            } else {
-                // Update total price
-                updateTotalPrice(-articlePrice);
+    function incrementQuantity(articleId) {
+        fetch(`/increment_quantity/${articleId}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        }
+            // Reload the page after successful incrementation
+            location.reload();
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
     }
 
-    function updateTotalPrice(articlePrice, deltaQuantity) {
-        var totalPriceElement = document.getElementById('total-price');
-        var currentTotalPrice = parseFloat(totalPriceElement.textContent);
-        var newTotalPrice = currentTotalPrice + (articlePrice * deltaQuantity);
-        totalPriceElement.textContent = newTotalPrice.toFixed(2);
-    }
-
-    function removeItem(articleId, articlePrice) {
-        // You can use AJAX to call your controller action to remove the item from the cart
-        // For simplicity, I'm redirecting to the remove item action directly
-        window.location.href = '{{ path('supprimer_du_panier', {'id': '__articleId__'}) }}'.replace('__articleId__', articleId);
-        
-        // Update total price
-        updateTotalPrice(-articlePrice, 0);
+    function decrementQuantity(articleId) {
+        fetch(`/decrement_quantity/${articleId}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            // Reload the page after successful decrementation
+            location.reload();
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
     }
 </script>
-
 
 </body>
 {% endblock %}
