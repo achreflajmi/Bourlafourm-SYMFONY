@@ -73,21 +73,34 @@
                     <h3 class="mb-4"><a href="#">{{ produit.nomProd }}</a></h3>
                     <p style="color: #fff;">{{ produit.description_prod }}</p>
                     <p><a href="#" style="color: #008152;">{{ produit.getCategorie().getNomCategorie() }}</a></p>
-                    <!-- Rating stars -->
-                    <div class="rating-stars" data-product-id="{{ produit.id }}">
+                     <!-- Rating stars -->
+<div class="rating-stars" data-product-id="{{ produit.id }}" data-update-url="{{ path('update_rating', {'productId': produit.id}) }}">
+                        {% set averageRating = 0 %}
+                        {% set totalRatings = produit.ratings|length %}
+                        {% for rating in produit.ratings %}
+                            {% set averageRating = averageRating + rating.rating %}
+                        {% endfor %}
+                        {% if totalRatings > 0 %}
+                            {% set averageRating = averageRating / totalRatings %}
+                        {% endif %}
                         {% for i in 1..5 %}
-                            <i class="star fas fa-star text-warning" data-rating="{{ i }}"></i>
+                            {% if averageRating >= i %}
+                                <i class="star fas fa-star selected" data-rating="{{ i }}"></i>
+                            {% else %}
+                                <i class="star fas fa-star" data-rating="{{ i }}"></i>
+                            {% endif %}
                         {% endfor %}
                     </div>
-                    <p class="average-rating">Average Rating: <span>{{ produit.rating }}</span></p>
-                    {% if user is not null %}
-                        <a href="{{ path('ajouterPanier', {'idProduit': produit.id, 'userId': user.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
-                            Ajouter au panier
-                        </a>
-                    {% else %}
-                        <!-- Handle the case where user is null -->
-                        <p>Utilisateur non trouvé</p>
-                    {% endif %}
+                    <p class="average-rating">Average Rating: <span>{{ averageRating }}</span></p>
+                    <!-- Add to cart button -->
+                   {% if user %}
+    <a href="{{ path('ajouterPanier', {'idProduit': produit.id, 'userId': user.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
+        Ajouter au panier
+    </a>
+{% else %}
+    <!-- Handle the case where user is not authenticated -->
+    <p>Connectez-vous pour ajouter au panier</p>
+{% endif %}
                 </div>
             </div>
         </div>
@@ -114,43 +127,53 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
+    // Function to handle rating submission
     $('.rating-stars .star').on('click', function() {
         var productId = $(this).closest('.rating-stars').data('product-id');
+        var updateUrl = $(this).closest('.rating-stars').data('update-url');
         var rating = parseFloat($(this).data('rating'));
-        var $averageRatingSpan = $(this).closest('.text').find('.average-rating span');
+        
+        // Store a reference to the clicked star element
+        var clickedStar = $(this);
 
-        // Calculate average rating
-        var average = parseFloat($averageRatingSpan.text());
-        var totalRatings = parseFloat($('.rating-stars .star.selected').length);
-        var totalRatingSum = average * totalRatings;
-
-        // Update totalRatingSum with the new rating
-        totalRatingSum += rating;
-        totalRatings++;
-
-        // Calculate new average rating
-        average = totalRatingSum / totalRatings;
-
-        // Update average rating display
-        $averageRatingSpan.text(average.toFixed(1));
-
-        // Send AJAX request to update rating in the database
+        // Send AJAX request to submit rating
         $.ajax({
-            url: "/update-rating/" + productId,
+            url: "{{ path('submit_rating') }}",
             method: "POST",
-            data: { rating: rating }, // Send rating as data in the request body
+            data: { productId: productId, rating: rating },
             success: function(response) {
-                console.log('Server Response:', response); // Debugging statement
-                if (!response.success) {
-                    console.error('Failed to update rating'); // Debugging statement
-                }
+                console.log('Rating submitted successfully:', response);
+
+                // Update the displayed stars based on the submitted rating
+                clickedStar.parent().find('.star').removeClass('selected');
+                clickedStar.prevAll('.star').addBack().addClass('selected');
+                
+                // Fetch the updated average rating for the product
+                $.ajax({
+                    url: updateUrl,
+                    method: "GET",
+                    success: function(response) {
+                        console.log('Average rating updated successfully:', response);
+                        
+                        // Update the displayed average rating
+                        var averageRating = parseFloat(response.average_rating);
+                        var averageRatingElement = clickedStar.closest('.rating-stars').siblings('.average-rating').find('span');
+                        averageRatingElement.text(averageRating.toFixed(1)); // Format to one decimal place
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error updating average rating:', error);
+                    }
+                });
             },
             error: function(xhr, status, error) {
-                console.error('Error updating rating:', error);
+                console.error('Error submitting rating:', error);
             }
         });
     });
 });
+
+
+
 </script>
 
  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
