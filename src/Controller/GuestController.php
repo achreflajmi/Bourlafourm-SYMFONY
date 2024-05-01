@@ -35,7 +35,7 @@ class GuestController extends AbstractController
         $user = $userRepository->find($userId);
 
         if ($user) {
-            // Vérifier le rôle de l'utilisateur
+            
             $roles = $user->getRoles();
 
             if (in_array('ROLE_SPORTIF', $roles)) {
@@ -48,11 +48,6 @@ class GuestController extends AbstractController
         }
 
 
-
-
-       
-
-        // Si l'utilisateur n'est pas trouvé ou n'a pas le rôle 'ROLE_SPORTIF', afficher la vue guest/index.html.twig
         return $this->render('guest/index.html.twig', [
             'user' => $user,
             'users' => [],
@@ -60,17 +55,6 @@ class GuestController extends AbstractController
         ]);
         
     }
-
-
-
-
- 
-    
-
-
-
-
-    
 
 
     #[Route('/delete/{id}', name: 'delete', methods: ['POST'])]
