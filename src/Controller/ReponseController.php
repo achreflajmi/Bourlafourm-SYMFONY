@@ -110,7 +110,7 @@ class ReponseController extends AbstractController
                 // Envoyer un e-mail de notification
                 $email = (new Email())
                 ->from('yo.yotalent7@gmail.com')
-                ->to('houssem.machlouch@sesame.com.tn')
+                ->to('oumasaadi18@gmail.com')
                 ->subject('Réclamation traitée')
                 ->text('notre admin'.$rec->getNom() . ' a envoyé une réclamation avec l\'objet : "' . $rec->getObj() . '". La réclamation a été traitée par notre administrateur.');
 
