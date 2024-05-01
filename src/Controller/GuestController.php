@@ -154,44 +154,7 @@ class GuestController extends AbstractController
     }
 
 
-/*
-    #[Route('/reclamationaa', name: 'reclamation')]
-    public function creeReclamation(EntityManagerInterface $em,Request $req,ReclamationRepository $RR)
-    {
-        $reclamation = new Reclamation();
-       $form=$this->createForm(AddEditReclamationType::class,$reclamation);
 
-       $form->handleRequest($req);
-
-       if ($form->isSubmitted() && $form->isValid()){
-        $reclamation->setEtat(false);
-        // Récupération du fichier image depuis le formulaire
-        $imageFile = $form->get('image')->getData();
-        // Vérification si un fichier image a été fourni
-        if ($imageFile) {
-            // Génération d'un nom de fichier unique basé sur le hachage md5 et l'extension du fichier
-            $newFileName = md5(uniqid()) . '.' . $imageFile->guessExtension();
-            // Déplacement du fichier image vers le répertoire de stockage
-            $imageFile->move(
-                'G:\ProjetWeb\ProjetWeb\ProjetWeb\public\assets\images', // Répertoire de stockage des images
-                $newFileName
-            );
-            $reclamation->setImage($newFileName);
-        } 
-        $em->persist($reclamation);
-        // Exécution des opérations d'écriture en base de données
-        $em->flush();
-        return $this->redirectToRoute('reclamation');
-       }
-
-     //  $listreclamation = $RR->findAll();
-
-
-       return $this->render('guest/reclamation.html.twig', [
-        'formAdd' => $form->createView(),  // Assurez-vous que la variable $form est bien définie dans votre contrôleur
-       // 'reclamationf' => $listreclamation,
-    ]);
-        }*/
 
         
 }
