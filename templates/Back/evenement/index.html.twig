@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <hr>
+        
+        <!-- Page Heading -->
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb" style="left: 250px; width: 82%;">
+            <div class="card-header py">
+                <h6 class="m-0 font-weight-bold text-primary">Evenement</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <h4><b>Liste des Evenements</b></h4>
+                    <div class="input-group mb">
+                        <input id="searchInput" type="text" name="query" placeholder="Rechercher..." class="form-control rounded">
+                        
+                    </div>
+                                
+                    <table id="SEARCH" class="table table-striped table-hover" style="padding: 0;">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Type</th>
+                                <th>Organisateur</th>
+                                <th>Date Debut</th>
+                                <th>Date Fin</th>
+                                <th>Capacite</th>
+                                <th>Image</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for Eve in liste %}
+                                <tr>
+                                    <td>{{ Eve.NomEvent }}</td>
+                                    <td>{{ Eve.Type }}</td>
+                                    <td>{{ Eve.organisateur}}</td>
+                                    <td>{{ Eve.Date_deb|date('d/m/Y') }}</td>
+                                    <td>{{ Eve.Date_fin.format('d/m/Y')}}</td>
+                                    <td>{{ Eve.Capacite }}</td>
+                                    <td>
+                                        <img src="{{ asset('assets/images/') ~ Eve.Image }}"
+                                             alt ="" style="object-fit: cover; width: 100px; height: 100px">
+                                    </td>
+                                    <td>
+                                        <a href="{{ path("EditEvent",{'idEvent':Eve.idEvent}) }}" class="btn btn-success "><i class="fa fa-wrench" aria-hidden="true"></i> Edit</a>
+                                        <a href="{{ path("deleteEve",{'idEvent':Eve.idEvent}) }}" class="btn btn-danger " ><i class="fa fa-trash" aria-hidden="true"></i>  Delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+
+
+
+                    <div id="calendar"></div>
+                    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Title:</strong> <span id="eventModalTitle"></span></p>
+                                    <p><strong>Start Date:</strong> <span id="eventModalStart"></span></p>
+                                    <p><strong>End Date:</strong> <span id="eventModalEnd"></span></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <br>
+                    <div align="left">
+                        <a href="/evenement/new" class="btn btn-success "><i class="fa fa-plus" aria-hidden="true"></i>
+                            Ajouter Evenement</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de recherche -->
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        
+        function performSearch() {
+            const query = searchInput.value.trim().toLowerCase(); // Convert the query to lowercase for case-insensitive search
+        
+            const rows = document.querySelectorAll('#SEARCH tbody tr'); // Get all table rows
+        
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td'); // Get all cells in the row
+        
+                let found = false;
+        
+                // Iterate through each cell in the row
+                for (let j = 0; j < cells.length; j++) { // Include all cells
+                    const cell = cells[j];
+                    const text = cell.textContent.toLowerCase(); // Get the text content of the cell and convert to lowercase
+        
+                    if (text.includes(query)) { // Check if the cell content contains the search query
+                        found = true;
+                        break; // Stop searching if a match is found in any cell
+                    }
+                }
+        
+                // Show or hide the row based on search result
+                row.style.display = found ? '' : 'none';
+            }
+        }
+        
+        searchInput.addEventListener('input', performSearch);
+    </script>
+
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block body %}
+<body>
+
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <div class="hero overlay" style="background-image: url('assets/images/background.jpg');">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-5 mx-auto text-center">
+            <h1 class="text-white">Produits</h1>
+            <p>Vos produits sont disponibles ici</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container site-section">
+      <div class="row">
+        <div class="col-6 title-section">
+          <h2 class="heading">Latest Products</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12"> <!-- Expand the search input to take the entire width -->
+          <div class="search-container"> <!-- New container for search input -->
+            <input type="text" id="searchInput" class="search-input" placeholder="Search..."> <!-- Apply search-input class -->
+          </div>
+          <div id="searchResults"></div>
+        </div>
+      </div>
+
+      <div class="row existing-products">
+    {% for produit in pagination %}
+    <div class="col-lg-4 mb-4">
+        <div class="custom-media d-block">
+            <div class="img mb-4">
+                {% if produit.getImageProd() %}
+                    <a href="single.html">
+                        <img src="{{ asset('assets/' ~ produit.getImageProd()) }}" alt="Image du produit" class="img-fluid">
+                    </a>
+                {% else %}
+                    No Image
+                {% endif %}
+            </div>
+            <div class="text">
+                <span class="meta">{{ produit.prix_prod }}</span>
+                <h3 class="mb-4"><a href="#">{{ produit.nomProd }}</a></h3>
+                <p style="color: #fff;">{{ produit.description_prod }}</p>
+                <p><a href="#" style="color: #008152;">{{ produit.getCategorie().getNomCategorie() }}</a></p>
+               {% if user is not null %}
+    <a href="{{ path('ajouterPanier', {'idProduit': produit.id, 'userId': user.id}) }}" class="btn py-3 px-4 mr-3 btn-primary">
+        Ajouter au panier
+    </a>
+{% else %}
+    <!-- Handle the case where user is null -->
+    <p>Utilisateur non trouvé</p>
+{% endif %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-7 text-center">
+          <div class="custom-pagination justify-content-center">
+            {{ knp_pagination_render(pagination) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#searchInput').on('input', function() {
+        var query = $(this).val().trim();
+        if (query.length > 0) {
+          $.ajax({
+            url: "{{ path('search_produit') }}",
+            method: "POST",
+            data: { query: query },
+            success: function(response) {
+              $('.existing-products').hide();
+              $('#searchResults').html(response).show();
+            }
+          });
+        } else {
+          $('.existing-products').show();
+          $('#searchResults').empty().hide();
+        }
+      });
+    });
+  </script>
+  <style>
+    .search-container {
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      transition: border-color 0.4s ease;
+      margin-bottom: 15px;
+      background-color: transparent;
+      color: white;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #008152;
+    }
+
+    .custom-pagination {
+      margin-top: 20px;
+    }
+
+    .custom-pagination ul.pagination {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+    }
+
+    .custom-pagination ul.pagination li {
+      margin: 0 5px;
+    }
+
+    .custom-pagination ul.pagination li.active a {
+      background-color: #008152;
+      color: white;
+      border-color: #008152;
+    }
+
+    .custom-pagination ul.pagination li a {
+      padding: 5px 10px;
+      text-decoration: none;
+      color: #008152;
+      border: 1px solid #008152;
+      border-radius: 3px;
+    }
+
+    .custom-pagination ul.pagination li a:hover {
+      background-color: #008152;
+      color: white;
+    }
+  </style>
+</body>
+{% endblock %}
