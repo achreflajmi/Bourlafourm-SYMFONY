@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use App\Form\ReponseType;
 use App\Repository\ReponseRepository;
 use App\Entity\Reponse;
-
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/admin')]
 class UserController extends AbstractController
