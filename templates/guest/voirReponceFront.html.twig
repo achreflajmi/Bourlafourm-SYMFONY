@@ -1,0 +1,49 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block title %} Réponses Admin{% endblock %}
+
+{% block body %}
+<div class="content-body">
+    <div class="container-fluid mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+<br><br><br><br><br><br>
+             
+             
+
+
+
+
+        <!-- ================ contact section start ================= -->
+     
+    <p class="d-flex justify-content-center mt-2"><b></b></p>
+    <div class="card-body pb-0">
+        <div class="row ">
+    <table class="table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reponse in reponses %}
+                    <tr>
+                        <td>{{ reponse.getNom() }}</td>
+                        <td>{{ reponse.getEmail() }}</td>
+                        <td>{{ reponse.getDescription() }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+          </div>
+        </div>
+        <br><br><br>
+             
+
+{% endblock %}
+
+{% block javascripts %}
+    {# Inclure ici les scripts JS spécifiques à cette page s'il y en a #}
+{% endblock %}

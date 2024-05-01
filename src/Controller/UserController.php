@@ -14,7 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use BaconQrCode\Renderer\Image\Png;
 use BaconQrCode\Writer;
+use App\Repository\ReclamationRepository;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use App\Form\ReponseType;
+use App\Repository\ReponseRepository;
+use App\Entity\Reponse;
 
 
 #[Route('/admin')]
@@ -27,6 +31,57 @@ class UserController extends AbstractController
             'users' => $userRepository->findAll(),
         ]);
     }
+
+
+
+
+    #[Route('/reponse/edit/{id}', name: 'editReponceAdmin', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    public function editAdminRePONCE(Request $request, int $id, ReponseRepository $reponseRepository): Response
+    {
+        // Charger l'entité Reponse à partir du ReponseRepository
+        $reponse = $reponseRepository->find($id);
+
+        // Vérifier si l'entité Reponse existe
+        if (!$reponse) {
+            throw $this->createNotFoundException('Réponse non trouvée pour l\'id : ' . $id);
+        }
+
+        // Créer le formulaire pour l'édition de l'entité Reponse
+        $form = $this->createForm(ReponseType::class, $reponse);
+        $form->handleRequest($request);
+
+        // Traiter le formulaire lorsqu'il est soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Enregistrer les modifications dans la base de données
+            $reponseRepository->save($reponse, true);
+
+            // Rediriger vers une autre page après l'édition réussie
+            return $this->redirectToRoute('app_reclamation_showAdmin', [], Response::HTTP_SEE_OTHER);
+        }
+
+        // Afficher le formulaire d'édition dans le template Twig
+        return $this->render('user/editReponceAdmin.html.twig', [
+            'reponse' => $reponse,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+
+
+
+    #[Route('/reclamation/show', name: 'app_reclamation_showAdmin')]
+    public function showReclamAdmin(ReclamationRepository $RR): Response
+    {
+        
+        $listreclamation = $RR->findAll();
+
+        return $this->render('user/listeReclamationAdmin.html.twig', [
+            'controller_name' => 'ReclamationController',
+            'reclamationsf' => $listreclamation,
+        ]);
+    }
+
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(EntityManagerInterface $entityManager ,Request $request, UserRepository $userRepository,UserPasswordHasherInterface $userPasswordHasher): Response

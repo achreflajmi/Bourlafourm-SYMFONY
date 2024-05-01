@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Afficher Réponses{% endblock %}
+
+{% block body %}
+<div class="content-body">
+    <div class="container-fluid mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center">Afficher Réponse</h2>
+                    </div>
+                    <div class="card-body">
+                        {% if reponses is not empty %}
+                            <div class="row">
+                                {% for reponse in reponses %}
+                                   
+                                       
+                                            <div class="card-header bg-light border-bottom-0">
+                                                <h5 class="text-muted">Nom ADMIN : {{ reponse.getNom() }}</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="text-muted"><strong>Email:</strong> {{ reponse.getEmail() }}</p>
+                                                <p class="text-muted"><strong>Réponse:</strong> {{ reponse.getDescription() }}</p>
+                                                <div class="mt-3">
+                                                    <a href="{{ path('editReponceAdmin', {'id': reponse.id}) }}" class="btn btn-info mr-2"><span class="fas fa-edit"></span> Modifier</a>
+                                                    <a href="{{ path('app_reponse_delete', {'id': reponse.id}) }}" class="btn btn-danger"><span class="fas fa-trash"></span> Supprimer</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="col-12 text-center mb-5">
+                                <p style="color: red;"><strong>Pas de réponse pour le moment.</strong></p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {# Inclure ici les scripts JS spécifiques à cette page s'il y en a #}
+{% endblock %}

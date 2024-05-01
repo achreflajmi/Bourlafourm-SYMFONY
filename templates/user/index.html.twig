@@ -27,10 +27,10 @@
 		<thead>
 			<tr>
 				<th>Id</th>
-				<th>Email</th>
+				<th>Emails</th>
 				<th>Roles</th>
-				<th>Image</th>
-				<th>actions</th>
+				<th>Profile pictures</th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 		<tbody id="all">
@@ -44,7 +44,7 @@
 					</td>
 					<td>
                         <a href="{{ path('report_user', {'id': user.id}) }}" class="btn btn-warning">Signaler</a>
-                        <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-warning">Show</a>
+                        <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-warning">Afficher</a>
 					</td>
 				</tr>
 			{% else %}
