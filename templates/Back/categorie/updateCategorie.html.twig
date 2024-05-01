@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="row page-titles mx-0">
+    <div class="col p-md-0">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Home</a></li>
+        </ol>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                      <h4 class="card-title">Modifier une categorie</h4>
+                <div class="form-validation">
+{{ form_start(c, {'attr': {'novalidate': 'novalidate', 'class': 'form-horizontal'}}) }}
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label" for="val-username">Nom due la categorie<span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            {{ form_widget(c.nom_categorie, {'attr': {'class': 'form-control', 'placeholder': 'Entrer le nom de la categorie'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label" for="val-suggestions">Description de la categorie<span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            {{ form_widget(c.description_categorie, {'attr': {'class': 'form-control', 'placeholder': 'Entrer la description de la categorie'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label" for="val-range">Type de la categorie<span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            {{ form_widget(c.type_categorie, {'attr': {'class': 'form-control', 'placeholder': 'Entrer le type de la catégorie'}}) }}
+                        </div>
+                    </div>
+                   
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label"><a href="#">Terms &amp; Conditions</a>  <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            <label class="css-control css-control-primary css-checkbox" for="val-terms">
+                                <input type="checkbox" class="css-control-input" id="val-terms" name="val-terms" value="1"> <span class="css-control-indicator"></span> I agree to the terms
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8 ml-auto">
+                         {{ form_widget(c.Ajouter, {'attr': {'class': 'btn btn-primary'}}) }}
+                        </div>
+                    </div>
+                    {{ form_end(c) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

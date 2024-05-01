@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheet %}
+    <!-- Vendor CSS Files -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/icofont/icofont.min.css" rel="stylesheet">
+    <link href="vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="vendor/venobox/venobox.css" rel="stylesheet">
+    <link href="vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="vendor/aos/aos.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+    <!-- Template Main CSS File -->
+    <link href="css/style.css" rel="stylesheet">
+    <!-- Chart.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+    <style>
+        /* Custom styles for the charts */
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 400px;
+        }
+        canvas {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6" style="top: 20px;left:100px">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="chart-container" style="width: 100%; height: 400px;">
+                            <canvas id="Events"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6"style="top: 20px;left:100px">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="chart-container" style="width: 100%; height: 400px;">
+                            <canvas id="Event"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+    <script>
+        // Chart for Capacite par evenement
+        let eventsChart = document.querySelector("#Events");
+        let eventsGraph = new Chart(eventsChart, {
+            type: "pie",
+            data: {
+                labels: {{ EevNom | raw }},
+                datasets: [{
+                    label: 'Capacite par evenement',
+                    data: {{ EevCap | raw }},
+                    backgroundColor: [
+                        '#4CAF50',
+                        '#2196F3',
+                        '#FFC107',
+                        '#9C27B0',
+                        '#FF5722',
+                        '#607D8B'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        fontColor: '#333',
+                        fontSize: 14
+                    }
+                }
+            }
+        });
+
+        // Chart for Repartition par evenement
+        let eventChart = document.querySelector("#Event");
+        let eventGraph = new Chart(eventChart, {
+            type: "bar",
+            data: {
+                labels: {{ EevNom | raw }},
+                datasets: [{
+                    label: 'Repartition par evenement',
+                    data: {{ EevCap | raw }},
+                    backgroundColor: [
+                        '#4CAF50',
+                        '#2196F3',
+                        '#FFC107',
+                        '#9C27B0',
+                        '#FF5722',
+                        '#607D8B'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            color: '#eee'
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+{% endblock %}

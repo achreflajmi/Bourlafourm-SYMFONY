@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <!-- ======= Hero Section ======= -->
+
+
+
+
+
+
+<div style="position: inherit;left: 120px;bottom: 75px;"" >
+    <div class="row" style="overflow-y:hidden;">
+        
+        <div class="col-md">
+            <section id="heroAdd" class="d-flex align-items-center" style="padding-top: 40px;">
+                <div class="container" >
+                    <div class="card o-hidden border-0 shadow-lg my-lg-5" style="width: 1150px;  height: 600px; ">
+                        <div class="card-body p-0" style="overflow-y: scroll; overflow-x: hidden;">
+                            <!-- Nested Row within Card Body -->
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="p-5">
+                                        <h1 class="h4 text-gray-900 mb-4" style="margin-top: 0px;">Ajouter Evenement</h1>
+                                        {{ form_start(FEV, {attr: {novalidate: 'novalidate'}}) }}
+                                        <div class="form-group">
+                                            {{ form_row(FEV.NomEvent, { 'attr': {'class': 'form-control form-control-user'} }) }}
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            {{ form_row(FEV.Type, {attr: {class: 'form-control form-control-user'}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_row(FEV.organisateur, {attr: {class: 'form-control form-control-user'}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_row(FEV.Date_deb, {attr: {class: 'form-control form-control-datepicker'}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_row(FEV.Date_fin, {attr: {class: 'form-control form-control-datepicker'}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_row(FEV.Capacite, {attr: {class: 'form-control form-control-user'}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_row(FEV.Image, {attr: {class: 'form-control form-control-user'}}) }}
+                                        </div>
+                                        <!--
+                                       
+                                        -->
+                                        <hr>
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit">Ajouter Evenement</button>
+                                        <a href="/ListEve" class="btn btn-danger btn-lg btn-block">Cancel</a>
+                                        {{ form_end(FEV) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section><!-- End Hero -->        </div>
+    </div>
+</div>
+    
+    
+
+{% endblock %}
