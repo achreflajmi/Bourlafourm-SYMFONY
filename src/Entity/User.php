@@ -96,7 +96,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  
 
     public function __construct() {
-        $this->dateN = new \DateTime(); // Ou une autre logique pour définir une date initiale
+        $this->dateN = new \DateTime(); 
         $this->reclationID = new ArrayCollection();
     }
 
