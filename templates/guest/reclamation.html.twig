@@ -1,0 +1,78 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block title %}User
+{% endblock %}
+
+{% block body %}
+<br><br><br>
+	
+<br><br><br>
+
+ <!-- ================ contact section start ================= -->
+        <section class="contact-section">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12">
+                        <h2 class="contact-title text-center">Ajouter une reclamation</h2>
+                    </div>
+                    <div class="col-lg-8">
+                                  {{ form_start(formAdd, {attr: {novalidate: 'novalidate'}}) }}
+                        <div class="card-body">
+                            <div class="row">
+                            <div class="col-sm-6">
+                                    <div class="form-group">
+                                    {{ form_widget(formAdd.nom, {'attr': {'placeholder': 'Nom&Prenom', 'class': 'form-control valid'}}) }}
+                                    {{ form_errors(formAdd.nom) }}
+                                   </div>
+                            </div>
+                            <div class="col-md-6 ">
+                            <div class="form-group">
+                                {{ form_widget(formAdd.email,{'attr':{'placeholder': 'Email', 'class': 'form-control'}}) }}
+                                    {{ form_errors(formAdd.email) }}
+                                     </div>
+                                     </div>
+                                    <div class="col-md-12 ">
+                                   <div class="form-group">
+                                    {{ form_widget(formAdd.obj, {'attr': {'placeholder': 'Objet', 'class': 'form-control valid'}}) }}
+                                    {{ form_errors(formAdd.obj) }}
+                                   </div>
+                                   </div>
+                                   <div class="col-sm-6">
+                                    <div class="form-group">
+                                    {{form_widget(formAdd.type, { 'attr': {'placeholder': 'Select a date','class': 'form-control valid','type': 'date', 'readonly': 'readonly'}}) }}
+                                   </div>
+                                   </div>
+                                   <div class="col-sm-12">
+                                    <div class="form-group">
+                                    {{ form_widget(formAdd.image, {'attr': {'placeholder': 'Votre Image', 'class': 'form-control', 'accept': 'image/*', 'required': 'required'} }) }}
+                                   </div>
+                                   </div>
+                                   <div class="col-md-12 ">
+                                    <div class="form-group">
+                                    {{ form_widget(formAdd.contenu, {'attr': {'placeholder': 'Contenu', 'class': 'form-control valid'}}) }}
+                                    {{ form_errors(formAdd.contenu) }}
+                                   </div>
+                                   </div>
+                                   <div class="col-md-12 ">
+                                    <div class="form-group">
+                                    
+                                   </div>
+                                   </div>
+                                </div>
+                                    <div class="col-md-12 form-group p_star d-flex justify-content-end">
+                                    {{ form_widget(formAdd.Envoyer, {'attr': {'class': 'btn btn-danger '} }) }}
+                                   </div>
+                                   <div><!-- validate --></div>
+                                {{ form_end(formAdd) }}
+
+
+                                
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+ 
+
+
+{% endblock %}

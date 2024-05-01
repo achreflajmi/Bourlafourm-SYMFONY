@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ADMIN DASHBOARD
+{% endblock %}
+
+{% block body %}
+     <div class="content-body">
+
+            <div class="container-fluid mt-3">
+                <div class="row">
+    <center>
+        <h1 style="margin-top:50px">Liste des réclamations</h1>
+    </center>
+  
+
+ 
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <!-- Main content -->
+    <section class="content">
+
+<!-- Default box -->
+                <div class="card bg-light">
+                    <div class="card-header text-white bg-blue border-bottom-0">
+                        Reclamation
+                    </div>
+                      <table class="table table-striped-columns">
+                        <thead>
+                          <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Objet</th>
+                            <th>Contenu</th>
+                            <th>Type</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                            <th>Réponse</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for reclamation in reclamationsf %}
+                          <tr>
+                            <td>{{reclamation.nom}}</td>
+                            <td>{{reclamation.email}}</td>
+                            <td>{{reclamation.obj}}</td>
+                            <td>{{reclamation.contenu}}</td>
+                            <td>{{reclamation.type}}</td>
+                            <td>
+                                          <td>{% if reclamation.image %}
+                                    <img src="{{ asset('assets/images/' ~ reclamation.image) }}" alt="user-avatar" class="" style="width: 200px;">
+                                {% endif %}</td>
+
+                            </td>
+                            <td><a href="{{ path('app_reponse_new', {'id': reclamation.id}) }}" style ="color:green;">Repondre </a>
+                            </td>
+                            <td>
+                            {% if reclamation.etat == 1 %}
+                            <a href="{{ path('app_reponse_show', {'id': reclamation.id}) }}" style ="color:black;" class="btn btn-warning">Afficher Réponse</a>
+                            {% else %}
+                            {% endif %}
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>  
+                      </table>
+      </div>
+      <!-- /.card -->
+    </section>
+  </div>
+ 
+
+
+
+
+     </div>
+</div>
+</div>
+
+
+
+    
+{% endblock %}

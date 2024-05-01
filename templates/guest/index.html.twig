@@ -4,17 +4,20 @@
 {% endblock %}
 
 {% block body %}
+<br><br><br>
 	<div class="container">
 	<br><br>
 		{% if app.user %}
 			<div class="mb-3">
 				You are logged in as : 
 			<h5>	{{ app.user.userIdentifier }}</h5>		
-				<a href="{{ path('app_logout')}}" class="btn btn-info">app_logout</a>
-			
+				
+			<a class="btn btn-info"href="{{ path('app_reclamation', {'id': user.id}) }}">Ajouter Reclmation</a>
+         <a class="btn btn-info"href="{{ path('app_reclamation_showUSER', {'id': user.id}) }}">Liste Reclmation</a>
 	
 			</div>
 		{% endif %}
+		<br><br><br>
 	
 		<center><img style="border-radius: 50%; object-fit: cover;" src="{{ asset('uploads/images/' ~ user.image) }}" width="150px" height="150px"/></center>
 		<br>
@@ -55,7 +58,51 @@
 			<a class="btn btn-primary" href="/guest/edit">
 				edit profil</a>
 		</center>
+<br>
+				<center>
+		
+		</center>
 </div></div></div><div class="row justify-content-center"><div class="col-md-8"></div></div></div>
+
+<br><br><br>
+<table class="table" id="t">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Email</th>
+            <th>Rôles</th>
+            <th>Image</th>
+            <th>Actions</th>
+	
+        </tr>
+    </thead>
+    <tbody id="all">
+        {% for user in users %}
+            {% if 'ROLE_NUTRITIONIST' in user.roles or 'ROLE_COATCH' in user.roles %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                      
+<td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+
+
+                    </td>
+                    <td>
+                        <img width="100" height="100" src="{{ asset('uploads/images/') }}{{ user.image }}">
+                    </td>
+              
+                </tr>
+            {% endif %}
+        {% endfor %}
+        {% if users|length == 0 %}
+            <tr>
+                <td colspan="5">Aucun abonnement trouvé</td>
+            </tr>
+        {% endif %}
+    </tbody>
+    <tbody id="search"></tbody>
+</table>
 
 
 

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="content-body">
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center mb-4">Modifier la réponse</h1>
+                <div class="card">
+                    <div class="card-body">
+                        {{ form_start(form, {attr: {'novalidate': 'novalidate', 'id': 'myForm'}}) }}
+
+                        <div class="form-group">
+                            {{ form_label(form.Nom) }}
+                            {{ form_widget(form.Nom, {'attr': {'class': 'form-control', 'placeholder': 'Votre Nom'}}) }}
+                            {{ form_errors(form.Nom) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.Email) }}
+                            {{ form_widget(form.Email, {'attr': {'class': 'form-control', 'placeholder': 'Votre Email'}}) }}
+                            {{ form_errors(form.Email) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.Description) }}
+                            {{ form_widget(form.Description, {'attr': {'class': 'form-control', 'placeholder': 'Votre Description'}}) }}
+                            {{ form_errors(form.Description) }}
+                        </div>
+
+                   
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,12 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -23,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['user', 'posts:read'])]
- 
+    
     private ?string $email = null;
 
     #[ORM\Column]
@@ -35,18 +39,10 @@ use Symfony\Component\Validator\Constraints as Assert;
      * @var string The hashed motpass
      */
     #[ORM\Column(name: "motpass")]
-
+  
     #[Groups(['user', 'posts:read'])]
     private ?string $motpass = null;
 
-
-
-
-
-
-
-
-    
 
     #[ORM\Column(length: 255)]
 
@@ -93,11 +89,15 @@ use Symfony\Component\Validator\Constraints as Assert;
      #[ORM\Column]
      #[Groups(['user', 'posts:read'])]
      private ?bool $isReported = false;
-    
 
+#[ORM\OneToMany(targetEntity: Reclamation::class, mappedBy: 'reclamationUser', cascade: ["remove"])]
+     private Collection $reclationID;
+
+ 
 
     public function __construct() {
         $this->dateN = new \DateTime(); // Ou une autre logique pour définir une date initiale
+        $this->reclationID = new ArrayCollection();
     }
 
 
@@ -308,6 +308,38 @@ use Symfony\Component\Validator\Constraints as Assert;
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Reclamation>
+     */
+    public function getReclationID(): Collection
+    {
+        return $this->reclationID;
+    }
+
+    public function addReclationID(Reclamation $reclationID): static
+    {
+        if (!$this->reclationID->contains($reclationID)) {
+            $this->reclationID->add($reclationID);
+            $reclationID->setReclamationUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReclationID(Reclamation $reclationID): static
+    {
+        if ($this->reclationID->removeElement($reclationID)) {
+            // set the owning side to null (unless already changed)
+            if ($reclationID->getReclamationUser() === $this) {
+                $reclationID->setReclamationUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+  
 
 
 

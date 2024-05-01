@@ -1,0 +1,104 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block title %}User
+{% endblock %}
+
+{% block body %}
+<br><br><br>
+	
+<br><br><br>
+
+
+ <!-- ================ contact section start ================= -->
+        <section class="contact-section">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12">
+                         <div class="col-md-6">
+      <form action="{{ path('app_reclamation_showUSER', {'id': app.request.attributes.get('id')}) }}" method="GET" class="text-right-end">
+    <div class="form-group d-inline-block">
+        <div class="row">
+            <!-- Ajoutez ici les champs de votre formulaire -->
+        </div>
+    </div>
+</form>
+
+        </div>
+                        <div class="">
+                        <h2 class="contact-title text-center mt-4">Liste de mes Reclamations</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Objet</th>
+                                <th scope="col">Contenu</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Etat</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Reponses</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for reclamationf in reclamationf %}
+                                <tr>
+                                <th>{{reclamationf.nom}}</th>
+                                <td>{{reclamationf.email}}</td>
+                                <td>{{reclamationf.obj}}</td>
+                                <td>{{reclamationf.contenu}}</td>
+                                <td>{{reclamationf.type}}</td>
+                                {% if reclamationf.etat == 0  %}
+                                <td style="color: red; font-weight: bold;">Non Traitée</td>
+                                {% elseif reclamationf.etat == 1 %}
+                                    <td style="color: green; font-weight: bold;">Traitée</td>
+                                {% endif %}
+                                
+                                <td>{% if reclamationf.image %}
+                                    <img src="{{ asset('assets/images/' ~ reclamationf.image) }}" alt="user-avatar" class="img-circle img-fluid mx-auto" style="width: 200px;">
+                                {% endif %}</td>
+                                <td>
+                                 {% if reclamationf.etat == 1 %}
+                                   <style>
+                                .green-link {
+                                display: inline-block;
+                                padding: 10px 15px;
+                                background-color: #4CAF50; /* Green background color */
+                                color: #fff; /* White text color */
+                                text-decoration: none;
+                                border-radius: 5px;
+                                transition: background-color 0.3s ease, color 0.3s ease;
+                                }
+
+                               .green-link:hover {
+                               background-color: #45a049; /* Darker green on hover */
+                               color: #fff; /* White text color on hover */
+                               transform: scale(1.05);
+                               }
+                               </style>
+
+    <a href="{{ path('app_reponse_showf', {'id': reclamationf.id }) }}" class="green-link"> Voir Reponce</a>
+ 
+                                {% else %} 
+                                {% endif %}
+                                </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                       
+                            </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+            </div>
+        </section>
+        <!-- ================ contact section end ================= -->
+
+
+
+
+{% endblock %}
