@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -19,10 +20,16 @@ class GuestType extends AbstractType
 
     {
         $builder
-            ->add('name', TextType::class, [
+            ->add('nom', TextType::class, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('prenom', TextType::class, [
                 'attr' => ['class' => 'form-control mb-3'],
             ])
             ->add('email', TextType::class, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('password', PasswordType::class, [
                 'attr' => ['class' => 'form-control mb-3'],
             ])
             ->add('image', FileType::class, [

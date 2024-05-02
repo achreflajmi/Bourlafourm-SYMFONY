@@ -3,7 +3,7 @@
 namespace App\Security;
 use App\Entity\User; 
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Doctrine\ORM\EntityManagerInterface; // Ajoutez cette ligne
+use Doctrine\ORM\EntityManagerInterface; 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,10 +64,7 @@ class UserAuthAuthenticator extends AbstractLoginFormAuthenticator
 
         // Vérifier si l'utilisateur est signalé
         if ($user->getIsReported()) {
-            // Ici, vous pouvez personnaliser la réponse selon votre besoin.
-            // Par exemple, rediriger l'utilisateur vers une page d'erreur,
-            // ou afficher un message qui lui indique que son compte est signalé.
-            // Assurez-vous d'avoir une route 'account_reported' définie dans votre application.
+            
             return new RedirectResponse($this->urlGenerator->generate('app_login'));
         }
 
@@ -79,7 +76,7 @@ class UserAuthAuthenticator extends AbstractLoginFormAuthenticator
         // Get the user role
         $userRole = $token->getUser()->getRoles()[0];
 
-        // Use a switch case to redirect to the appropriate page
+    
         switch($userRole) {
             case 'ROLE_ADMIN':
                 $request->getSession()->set('user_id', $token->getUser()->getId());

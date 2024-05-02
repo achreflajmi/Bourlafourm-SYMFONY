@@ -12,6 +12,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 
 use App\Form\AddEditReclamationType;
 use App\Form\ReclamationType;
@@ -90,69 +92,60 @@ class GuestController extends AbstractController
  
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     #[Route('/guest/edit', name: 'app_guest_edit')]
-    public function edit(Request $request, UserRepository $userRepository): Response
+    public function edit(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        $userId = $this->getUser()->getId();
-        $user = $userRepository->getUserById($userId);
-        $form = $this->createForm(GuestType::class, $user);
-        $form->handleRequest($request);
-        $img = $user->getImage();
+    $userId = $this->getUser()->getId();
+    $user = $userRepository->getUserById($userId);
+    $form = $this->createForm(GuestType::class, $user);
+    $form->handleRequest($request);
+    $img = $user->getImage();
 
+    if ($form->isSubmitted() && $form->isValid()) {
+        $nom = $form->get('nom')->getData();
+        $prenom = $form->get('prenom')->getData();
+        $email = $form->get('email')->getData();
+        $file = $form->get('image')->getData();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $name = $form->get('name')->getData();
-            $email = $form->get('email')->getData();
-            $file = $form->get('image')->getData();
-            if($file)
-            {
-                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-                try {
-                    $file->move(
-                        $this->getParameter('images_directory'),
-                        $fileName
-                    );
-                    //set img with image selected 
-                    
-                } catch (FileException $e){
-
-                }
-                $user->setImage($fileName);
-            }
-            $user->setName($name);
-            $user->setEmail($email);
-
-            // Save the updated user entity to the database
-            $userRepository->save($user, true);
-
-            return $this->redirectToRoute('app_guest', [], Response::HTTP_SEE_OTHER);
+        
+        $newPassword = $form->get('password')->getData();
+        if (!empty($newPassword)) {
+            // Encodage du nouveau mot de passe
+            $encodedPassword = $passwordEncoder->encodePassword($user, $newPassword);
+            $user->setPassword($encodedPassword);
         }
 
-        return $this->renderForm('guest/edit.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
+        if ($file) {
+            $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+            try {
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+                
+                
+            } catch (FileException $e) {
+                // Handle file exception
+            }
+            $user->setImage($fileName);
+        }
+
+        $user->setNom($nom);
+        $user->setPrenom($prenom);
+        $user->setEmail($email);
+
+        // Enregistrer l'entité utilisateur mise à jour dans la base de données
+        $userRepository->save($user, true);
+
+        return $this->redirectToRoute('app_guest', [], Response::HTTP_SEE_OTHER);
     }
 
+    return $this->renderForm('guest/edit.html.twig', [
+        'user' => $user,
+        'form' => $form,
+    ]);
+    }
+    
 
 
 
