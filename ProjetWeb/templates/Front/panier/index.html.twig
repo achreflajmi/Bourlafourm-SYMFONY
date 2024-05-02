@@ -29,6 +29,11 @@
           <h2 class="heading">Détails du Panier</h2>
         </div>
       </div>
+<a href="{{ path('displayFront') }}" class="btn py-3 px-4 btn-primary" style="float: right; margin-left: 10px;">Retour aux Produits</a>
+          <br>
+          <br>
+
+
       <div class="row">
         {% set totalPanier = 0 %}
         {% for article in articles %}
@@ -64,10 +69,21 @@
                     <strong id="total-price" style="color: #fff;">{{ totalPanier }} TND</strong>
                 </li>
             </ul>
-        </div>
-        <a id="sending" href="{{ path('app_stripe') }}">
-            <button type="button" class="btn btn-primary btn-round btn-block" style="margin-top: 12px; margin-left:40%; font-weight:bold;">Commander</button>
+                </div>
+   <div style="display: flex; justify-content: flex-end; text-align: right;">
+    <div style="margin-top: 12px; font-weight:bold; float: right; margin-left: 900px;">
+        <a onclick="viderPanier()">
+            <button type="button" class="btn btn-primary btn-round btn-block">Vider le Panier</button>
         </a>
+    </div>
+    <div style="margin-top: 12px; font-weight:bold; margin-left: 10px;float: right;">
+        <a id="sending" href="{{ path('app_stripe') }}">
+            <button type="button" class="btn btn-primary btn-round btn-block">Commander</button>
+        </a>
+    </div>
+</div>
+
+
       </div>
     </div>
 
@@ -75,7 +91,27 @@
       <!-- Footer content -->
     </footer>
   </div>
+<script>
+function viderPanier() {
+    // Make an AJAX request to the server to empty the cart
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{{ path('empty_cart', {'userId': user.id }) }}", true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                // Cart emptied successfully, reload the page
+                window.location.reload();
+            } else {
+                // Handle error, if any
+                console.error("Error occurred while emptying the cart.");
+            }
+        }
+    };
+    xhr.send();
+}
 
+</script>
 <script>
     function incrementQuantity(articleId) {
         fetch(`/increment_quantity/${articleId}`, {

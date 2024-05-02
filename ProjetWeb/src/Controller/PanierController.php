@@ -155,18 +155,18 @@ public function removeFromCart($panierId, PanierRepository $panierRep)
     $this->entityManager->flush();
 }
 
-public function emptyCart($userId)
-{
-    $panier = $this->entityManager->getRepository(Panier::class)->findBy([
-        'User' => $userId
-    ]);
+// public function emptyCart($userId)
+// {
+//     $panier = $this->entityManager->getRepository(Panier::class)->findBy([
+//         'User' => $userId
+//     ]);
 
-    foreach ($panier as $item) {
-        $this->entityManager->remove($item);
-    }
+//     foreach ($panier as $item) {
+//         $this->entityManager->remove($item);
+//     }
 
-    $this->entityManager->flush();
-}
+//     $this->entityManager->flush();
+// }
 public function incrementQuantity($articleId)
 {
     $panier = $this->entityManager->getRepository(Panier::class)->find($articleId);
@@ -183,7 +183,7 @@ public function incrementQuantity($articleId)
     return new JsonResponse(['success' => true]);
 }
 
-public function decrementQuantity($articleId)
+public function decrementQuantity($articleId, PanierRepository $panierRep)
 {
     $panier = $this->entityManager->getRepository(Panier::class)->find($articleId);
 
@@ -195,11 +195,41 @@ public function decrementQuantity($articleId)
 
     if ($quantitePanier > 0) {
         $panier->setQuantitePanier($quantitePanier - 1);
+
+        if ($quantitePanier - 1 == 0) {
+            $this->entityManager->remove($panier);
+        }
+
         $this->entityManager->flush();
     }
 
     return new JsonResponse(['success' => true]);
 }
 
+#[Route("/empty_cart/{userId}", name: "empty_cart", methods: ["POST"])]
 
+public function emptyCart($userId, Request $request): Response
+{
+    // Retrieve the user by ID
+    $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
+
+    if (!$user) {
+        // Handle case when user is not found
+        return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+    }
+
+    // Retrieve cart items for the user
+    $cartItems = $user->getPaniers();
+
+    // Remove each cart item
+    foreach ($cartItems as $item) {
+        $this->entityManager->remove($item);
+    }
+
+    // Flush changes to the database
+    $this->entityManager->flush();
+
+    // Return success response
+    return new JsonResponse(['success' => true]);
+}
 }

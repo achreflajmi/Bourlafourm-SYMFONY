@@ -39,7 +39,7 @@ class ProduitController extends AbstractController
     {
         $userId = 1;
         $user = $userRepository->find($userId);
-        
+        $produits= $this->getDoctrine()->getManager()->getRepository(Produit::class)->findAll();
         // Fetch the query builder for products
         $queryBuilder = $this->getDoctrine()->getManager()->getRepository(Produit::class)->createQueryBuilder('p');
         
@@ -47,7 +47,7 @@ class ProduitController extends AbstractController
         $pagination = $paginator->paginate(
             $queryBuilder,
             $request->query->getInt('page', 1), // Get the current page number from the request
-            6 // Items per page
+            3 // Items per page
         );
     
         // Iterate through pagination to calculate average rating for each product
@@ -57,6 +57,7 @@ class ProduitController extends AbstractController
         }
         
         return $this->render('Front/produit/index.html.twig', [
+            'p' => $produits ,
            'pagination' => $pagination,
            'user' => $user,
         ]);

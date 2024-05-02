@@ -105,16 +105,16 @@
             </div>
         </div>
         {% endfor %}
+
       </div>
 
-      <div class="row justify-content-center">
-        <div class="col-lg-7 text-center">
-          <div class="custom-pagination justify-content-center">
-            {{ knp_pagination_render(pagination) }}
-          </div>
+   <div class="row justify-content-center"> 
+            <div class="custom-pagination justify-content-center">
+                {{ knp_pagination_render(pagination) }}
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
   </div>
 
@@ -176,6 +176,7 @@ $(document).ready(function() {
 
 </script>
 
+
  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
@@ -227,38 +228,7 @@ setTimeout(function() {
       border-color: #008152;
     }
 
-    .custom-pagination {
-      margin-top: 20px;
-    }
-
-    .custom-pagination ul.pagination {
-      display: flex;
-      justify-content: center;
-      list-style: none;
-    }
-
-    .custom-pagination ul.pagination li {
-      margin: 0 5px;
-    }
-
-    .custom-pagination ul.pagination li.active a {
-      background-color: #008152;
-      color: white;
-      border-color: #008152;
-    }
-
-    .custom-pagination ul.pagination li a {
-      padding: 5px 10px;
-      text-decoration: none;
-      color: #008152;
-      border: 1px solid #008152;
-      border-radius: 3px;
-    }
-
-    .custom-pagination ul.pagination li a:hover {
-      background-color: #008152;
-      color: white;
-    }
+   
   </style>
 
   <style>
