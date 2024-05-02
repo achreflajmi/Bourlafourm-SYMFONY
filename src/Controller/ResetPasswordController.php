@@ -19,27 +19,25 @@ class ResetPasswordController extends AbstractController
 #[Route('/reset-password', name: 'reset_password')]
 public function resetPassword(Request $request, EntityManagerInterface $entityManager , MailerInterface $mailer)
 {
-    // Crée un formulaire basé sur la classe ResetPasswordType. C'est probablement un formulaire personnalisé pour réinitialiser le mot de passe.
     $form = $this->createForm(ResetPasswordType::class);
-    // Traite la requête HTTP actuelle et remplit le formulaire avec les données envoyées par l'utilisateur, s'il y en a.
+
     $form->handleRequest($request);
 
-    // Vérifie si le formulaire a été soumis et si les données sont valides selon les règles définies dans ResetPasswordType.
     if ($form->isSubmitted() ) {
-        // Récupère les données du formulaire.
+      
         $data = $form->getData();
-        // Obtient l'adresse e-mail à partir des données du formulaire.
+        
         $toemail = $data->getEmail();
-        // Utilise l'EntityManager pour récupérer un utilisateur par son e-mail en utilisant la méthode personnalisée getUserByEmail() définie plus loin.
+        //récupérer un utilisateur par son e-mail
         $user = $entityManager->getRepository(User::class)->getUserByEmail($toemail);
         
-        // Vérifie si un utilisateur avec cet e-mail existe.
+        
         if ($user) {
-            // Génère un code de réinitialisation .
+            
             $resetCode = $this->generateResetCode();
-            // Attribue le code de réinitialisation à l'utilisateur.
+            
             $user->setResetCode($resetCode);
-            // Sauvegarde les changements dans la base de données.
+            
             $entityManager->flush();
 
             // Crée le corps de l'e-mail en HTML.
@@ -55,7 +53,7 @@ public function resetPassword(Request $request, EntityManagerInterface $entityMa
                 </body>
             </html>
             ';
-            // Configure et envoie l'e-mail à l'utilisateur.
+           
             $email = (new Email())
             ->from('yo.talent7@gmail.com')
             ->to($toemail)
@@ -68,7 +66,6 @@ public function resetPassword(Request $request, EntityManagerInterface $entityMa
         }
     }
 
-    // Si le formulaire n'est pas soumis ou si l'utilisateur n'est pas trouvé, affiche de nouveau le formulaire de réinitialisation.
     return $this->render('resetpassword/reset_password.html.twig', [
         'formReset' => $form->createView(),
     ]);

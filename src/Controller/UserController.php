@@ -136,48 +136,6 @@ class UserController extends AbstractController
         ]);
     }
 
-//     #[Route('/edit/{id}', name: 'app_user_edit', methods: ['GET', 'POST'])]
-// public function edit($id, Request $request, UserRepository $userRepository): Response
-// {
-//     $user = $userRepository->find($id);
-
-//     if (!$user) {
-//         throw $this->createNotFoundException('No user found for id '.$id);
-//     }
-
-//     $form = $this->createForm(UserType::class, $user);
-//     $form->handleRequest($request);
-
-//     if ($form->isSubmitted() && $form->isValid()) {
-//         // Traitement du formulaire
-
-//         // Si le fichier est présent
-//         $file = $form->get('image')->getData();
-//         if ($file) {
-//             $fileName = md5(uniqid()).'.'.$file->guessExtension();
-//             try {
-//                 $file->move($this->getParameter('images_directory'), $fileName);
-//             } catch (FileException $e) {
-//                 // Gérer l'exception si le fichier n'a pas pu être téléchargé
-//             }
-//             $user->setImage($fileName);
-//         } else {
-//             // Si aucun fichier n'est téléchargé, utilisez l'image existante
-//             $fileName = $user->getImage();
-//         }
-
-//         // Mettre à jour l'utilisateur
-//         $userRepository->updateUser($id, $form->get('name')->getData(), $form->get('email')->getData(), $fileName);
-
-//         return $this->redirectToRoute('test', [], Response::HTTP_SEE_OTHER);
-//     }
-
-//     return $this->renderForm('user/edit.html.twig', [
-//         'user' => $user,
-//         'form' => $form,
-//     ]);
-// }
-
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {
