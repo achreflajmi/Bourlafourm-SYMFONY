@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -59,6 +60,47 @@ class EvenementController extends AbstractController
     
         return $response;
     }
+
+
+
+    #[Route('/update-event-date', name: 'update_event_date', methods: ['POST'])]
+    public function updateEventDate(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Retrieve data from the AJAX request
+        $eventId = $request->request->get('eventId');
+        $startDate = new \DateTime($request->request->get('startDate'));
+        $endDate = new \DateTime($request->request->get('endDate'));
+    
+        // Retrieve the event entity from the database
+        $event = $entityManager->getRepository(Evenement::class)->find($eventId);
+    
+        // Check if the event exists
+        if (!$event) {
+            return new JsonResponse(['error' => 'Event not found'], Response::HTTP_NOT_FOUND);
+        }
+    
+        try {
+            // Update the event start and end dates
+            $event->setDate_deb($startDate);
+            $event->setDate_fin($endDate);
+    
+            // Persist the changes to the database
+            $entityManager->flush();
+    
+            // Return a success response
+            return new JsonResponse(['message' => 'Event dates updated successfully'], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            // Log the exception for debugging
+            // You can use Symfony's logger service for this purpose
+    
+            // Return an error response
+            return new JsonResponse(['error' => 'Error updating event dates'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+
+
+
 
 
 
