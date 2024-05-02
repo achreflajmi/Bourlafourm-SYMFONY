@@ -999,25 +999,36 @@ h1, h2, h3, h4, h5,
       color: #008152; }
    
 
-.custom-pagination a, .custom-pagination span {
+.custom-pagination span {
   display: inline-block;
   color: white;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background: transparent;
+  background: #008152;;
   line-height: 40px;
   text-align: center;
   font-weight: bold;
-  border: 2px solid #008152;
-  margin: 0 5px; }
-
+  margin: 0 5px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 30px; 
+}
+.pagination li {
+  display: inline;
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+.pagination .disabled {
+  pointer-events: none; /* Disable pointer events for disabled pages */
+  opacity: 0.5; 
+}
 .custom-pagination a:hover {
-  background: #fff;
-  color: #008152; }
-
-.custom-pagination span {
-  background: #008152;
+  background: #212529;
   color: #fff; }
 
 .sidebar-box {
