@@ -41,9 +41,44 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         $('#eventModalTitle').text(info.event.title);
         $('#eventModalStart').text(info.event.start);
         $('#eventModalEnd').text(info.event.end);
-    }
+    },
+    editable: true, // Enable dragging and dropping events
+        eventDrop: function(info) {
+            console.log(info)
+            // When an event is dropped, update its dates
+            updateEventDate(info.event);
+        }
 });
 calendar.render();
+
+
+function updateEventDate(event) {
+    // Get the updated start and end dates
+    var startDate = event.start;
+    var endDate = event.end;
+
+    // Send an AJAX request to update the event dates
+    $.ajax({
+        url: '{{ path("update_event_date") }}',
+        method: 'POST',
+        data: {
+            eventId: event.id,
+            startDate: startDate,
+            endDate: endDate
+        },
+        success: function(response) {
+            // Handle success
+            console.log('Event dates updated successfully');
+        },
+        error: function(xhr, status, error) {
+            // Handle error
+            console.error('Error updating event dates:', error);
+        }
+        });
+    }
+
+
+
 });
   
       </script>
@@ -319,7 +354,6 @@ calendar.render();
                             <li><a href="./evenement/new">Ajouter un événement</a></li>
                             <li><a href="./ListEve">Afficher les événements</a></li>
                             <li><a href="./Stat">Statestiques des événement</a></li>
-                            <li><a href="./calendar/events">Calendrier</a></li>
 
                         </ul>
                     </li>
