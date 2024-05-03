@@ -23,7 +23,7 @@
         <div class="nav-header">
             <div class="brand-logo">
                 <a href="index.html">
-                    <b><img src="assets/images/bourlafourm.png" alt=""> </b>
+                    <center><img src="assets/images/bourlafourm.png" width="50px" alt=""> </center>
    
                 </a>
             </div>
@@ -182,19 +182,6 @@
                                 </div>
                             </div>
                         </li>
-                              <li class="icons dropdown d-none d-md-flex">
-                            <a href="javascript:void(0)" class="log-user"  data-toggle="dropdown">
-                                <span>Compte</span>  <i class="fa fa-angle-down f-s-14" aria-hidden="true"></i>
-                            </a>
-                            <div class="drop-down dropdown-language animated fadeIn  dropdown-menu">
-                                <div class="dropdown-content-body">
-                                    <ul>
-                            <li><a href="{{ path('app_logout') }}">Logout</a></li>
-                                     
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
                                 <span class="activity active"></span>
@@ -242,7 +229,7 @@
                 <ul class="metismenu" id="menu">
                     <li class="nav-label">Dashboard</li>
                     <li>
-                        <a class="has-arrow" href="indexBack" aria-expanded="false">
+                        <a class="has-arrow" href="{{ path('display_produitAdmin') }}" aria-expanded="false">
                             <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
 
@@ -252,7 +239,7 @@
                             <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Layouts</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="{{ path('app_logout') }}">Logout</a></li>
+                            <li><a href="./layout-blank.html">Blank</a></li>
                             <li><a href="./layout-one-column.html">One Column</a></li>
                             <li><a href="./layout-two-column.html">Two column</a></li>
                             <li><a href="./layout-compact-nav.html">Compact Nav</a></li>
@@ -274,7 +261,8 @@
                         <ul aria-expanded="false">
                             <li><a href="./addProduit">Ajouter un produit</a></li>
                             <li><a href="./AfficherProduit">Afficher un produit</a></li>
-                            <li><a href="./email-compose.html">Compose</a></li>
+                             <li><a href="./addCategorie">Ajouter une categorie</a></li>
+                            <li><a href="./AfficherCategorie">Afficher une categorie</a></li>
                         </ul>
                     </li>
                     <li>
@@ -282,8 +270,8 @@
                             <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Packs</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="./app-profile.html">Ajouter un pack</a></li>
-                            <li><a href="./app-calender.html">Afficher un pack</a></li>
+                            <li><a href="./fiche">Fiches patients</a></li>
+                            <li><a href="./stat">Afficher Statistiques</a></li>
                         </ul>
                     </li>
                     <li>
@@ -394,15 +382,7 @@
             Sidebar end
         ***********************************-->
 {% endblock %}
-    {% block body %}
-    
-    
-    
-    		
-    
-    
-    
-    {% endblock %}
+    {% block body %}{% endblock %}
 
     {% block javascripts %}
     <script src="{{ asset('assets/plugins/common/common.min.js') }}"></script>

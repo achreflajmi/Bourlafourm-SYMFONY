@@ -13,12 +13,11 @@ class Panier
 
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+#[ORM\GeneratedValue]
+#[ORM\Column(name: "id")]
+private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $id_user = null;
+
 
     #[ORM\Column]
     private ?float $total_panier = null;
@@ -44,16 +43,20 @@ class Panier
     {
         return $this->id;
     }
+    #[ORM\ManyToOne(targetEntity: "App\Entity\User", inversedBy: "users")]
+#[ORM\JoinColumn(name: "id_user", referencedColumnName: "id", nullable: false)]
 
-    public function getIdUser(): ?int
+    private ?User $user = null;
+
+
+    public function getUser(): ?User
     {
-        return $this->id_user;
+        return $this->user;
     }
 
-    public function setIdUser(int $id_user): static
+    public function setUser(?User $user): self
     {
-        $this->id_user = $id_user;
-
+        $this->user = $user;
         return $this;
     }
 

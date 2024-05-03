@@ -1,0 +1,209 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block title %}Formulaire Coordonnees{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="hero overlay" style="background-image: url('images/bg_3.jpg');">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-9 mx-auto text-center">
+                    <h1 class="text-white">Ajouter Coordonnées</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br><br> <br><br> <br><br> <br><br>
+    <div class="col-lg-6">
+        <div class="custom-media d-flex">
+            <div class="img mr-4" style="flex: 0 0 50%;"> <!-- Définir la largeur de l'image à 50% -->
+                <img src="assets/images/IMC.jpg" alt="Image" class="img-fluid">
+            </div>
+            <div class="text" style="flex: 1;"> <!-- Définir la largeur du texte à 100% pour qu'il prenne le reste de l'espace -->
+                <span class="meta">May 2, 2024</span>
+                <h3 class="mb-4"><a href="#">Signification de l'IMC</a></h3>
+                <p style="width: 800px;"> <!-- Définir la largeur du paragraphe à 100% -->
+                    Voilà comment comprendre le calcul de votre IMC :
+                    <ul style="list-style-type: none; padding-left: 0;"> <!-- Supprimer les puces de la liste et le retrait à gauche -->
+                        <li>Moins de 18.5 : Poids insuffisant et pouvant occasionner certains risques pour la santé.</li>
+                        <li>Entre 18.5 et 24.9 : Poids santé qui n'augmente pas les risques pour la santé.</li>
+                        <li>Entre 25 et 29.9 : Excès de poids pouvant occasionner certains risques pour la santé.</li>
+                        <li>Plus de 30 : Obésité, risque accru de développer certaines maladies.</li>
+                    </ul>
+                </p>
+                <p><a href="#">Read more</a></p>
+            </div>
+        </div>
+    </div>
+
+    <br><br> <br><br> <br><br> <br><br>
+
+    
+   <div class="container">
+    <h1 class="text-center mb-4">Calculatrice</h1>
+    <h5 class="text-center mb-4">IMC = poids (en kg)/taille² (en m)</h5>
+    <div class="row justify-content-center">
+        <div class="col-md-6 order-md-2">
+            <form method="post" action="{{ path('calculate_expression') }}" novalidate class="text-center">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="expression" id="expression" placeholder="Entrez votre expression mathématique" required>
+                </div>
+                
+                
+                <button type="submit" class="btn btn-primary btn-block">Calculer</button>
+            </form>
+        </div>
+    </div>
+
+    {% if result is defined %}
+    <div class="row justify-content-center">
+        <div class="col-md-6 order-md-2">
+            <div class="alert alert-success" role="alert">
+                Résultat : {{ result }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function appendToExpression(value) {
+        document.getElementById('expression').value += value;
+    }
+</script>
+
+<style>
+    .btn-primary {
+        color: #fff;
+        background-color: #0c4008;
+        border-color: #1e8d18;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
+    .form-control {
+        height: 43px;
+        border-radius: 4px;
+        background: none;
+        border-width: 1px;
+        color: #34c724 !important;
+        border-color: rgb(26 199 82 / 20%);
+        font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+</style>
+
+
+
+<br><br> <br><br> <br><br> <br><br>
+    <h1 class="text-center mb-4">Formulaire Coordonnées</h1>
+
+    <!-- Formulaire  -->
+    <div class="row justify-content-center">
+        <div class="col-md-6 order-md-2">
+            <form method="post" novalidate class="text-center">
+                
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn btn-primary btn-block mb-3">AJOUTER</button>
+                {{ form_end(form) }}
+            </form>
+        </div>
+    </div>
+</div>
+
+    <div class="row justify-content-center">
+        {% for coord in Coordonnees %}
+            <div class="col-md-3 mb-4"> <!-- Divisez la largeur de la colonne Bootstrap par 4 -->
+                <div class="card bg-light w-100">
+                    <img src="assets/images/background.jpg" alt="Image" class="card-img-top">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ coord.sexe }}</h3>
+                        <ul class="list-unstyled">
+                            <li>Âge: {{ coord.age }}</li>
+                            <li>Taille: {{ coord.taille }}</li>
+                            <li>Poids: {{ coord.poids }}</li>
+                            <li>IMC: {{ coord.imc }}</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer text-center">
+                        <div class="actions">
+                            <a href="{{ path('editcorrrrr', {'id': coord.id }) }}" class="btn btn-primary">Edit</a>
+                            <a href="{{ path('delete_Coordonnees', {'id': coord.id }) }}" class="btn btn-danger">Delete</a>
+                            
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if loop.index % 4 == 0 %}</div><div class="row justify-content-center">{% endif %}
+        {% endfor %}
+    </div>
+
+    <br><br> <br><br> <br><br> <br><br>
+
+
+<style>
+    .btn-primary {
+        color: #fff;
+        background-color: #0c4008;
+        border-color: #1e8d18;
+    }
+
+    .form-control {
+        height: 43px;
+        border-radius: 4px;
+        background: none;
+        border-width: 1px;
+        color: #34c724 !important;
+        border-color: rgb(26 199 82 / 20%);
+        font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+   .btn-primary {
+        color: #fff;
+        background-color: #0c4008;
+        border-color: #1e8d18;
+    }
+
+    /* Style pour le cadre de l'image */
+    .image-cadre {
+        border: 3px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        overflow: hidden;
+        background: #a2f797; /* Couleur verte pour l'arrière-plan */
+        position: relative;
+    }
+
+    /* Style pour l'arrière-plan semi-transparent */
+    .hero.overlay:before {
+        /* content: ""; */
+        position: absolute;
+        background: rgb(10 98 30 / 50%);
+        /* top: 0; */
+        /* left: 0; */
+        /* right: 0; */
+        bottom: 0;
+    }
+
+    /* Style spécifique pour les contrôles de formulaire */
+    .form-control {
+        height: 43px;
+        border-radius: 4px;
+        background: none;
+        border-width: 1px;
+        color: #34c724 !important;
+        border-color: rgb(26 199 82 / 20%);
+        font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+</style>
+
+{% endblock %}

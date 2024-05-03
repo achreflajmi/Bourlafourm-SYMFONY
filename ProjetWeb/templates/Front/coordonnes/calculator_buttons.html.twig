@@ -1,0 +1,86 @@
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="btn-group btn-group-lg btn-block mb-3" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('7')">7</button>
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('8')">8</button>
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('9')">9</button>
+        </div>
+        <div class="btn-group btn-group-lg btn-block mb-3" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('4')">4</button>
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('5')">5</button>
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('6')">6</button>
+        </div>
+        <div class="btn-group btn-group-lg btn-block mb-3" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('1')">1</button>
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('2')">2</button>
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('3')">3</button>
+        </div>
+        <div class="btn-group btn-group-lg btn-block mb-3" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('+')">+</button>
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('-')">-</button>
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('*')">*</button>
+        </div>
+        <div class="btn-group btn-group-lg btn-block mb-3" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('(')">(</button>
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression(')')">)</button>
+            <button type="button" class="btn btn-secondary" onclick="appendToExpression('/')">/</button>
+        </div>
+        <div class="btn-group btn-group-lg btn-block" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('expression').value = ''">Clear</button>
+        </div>
+    </div>
+</div>
+<style>
+    .btn-primary {
+        color: #fff;
+        background-color: #0c4008;
+        border-color: #1e8d18;
+    }
+
+    .form-control {
+        height: 43px;
+        border-radius: 4px;
+        background: none;
+        border-width: 1px;
+        color: #34c724 !important;
+        border-color: rgb(26 199 82 / 20%);
+        font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+   .btn-primary {
+        color: #fff;
+        background-color: #0c4008;
+        border-color: #1e8d18;
+    }
+
+    /* Style pour le cadre de l'image */
+    .image-cadre {
+        border: 3px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        overflow: hidden;
+        background: #a2f797; /* Couleur verte pour l'arrière-plan */
+        position: relative;
+    }
+
+    /* Style pour l'arrière-plan semi-transparent */
+    .hero.overlay:before {
+        /* content: ""; */
+        position: absolute;
+        background: rgb(10 98 30 / 50%);
+        /* top: 0; */
+        /* left: 0; */
+        /* right: 0; */
+        bottom: 0;
+    }
+
+    /* Style spécifique pour les contrôles de formulaire */
+    .form-control {
+        height: 43px;
+        border-radius: 4px;
+        background: none;
+        border-width: 1px;
+        color: #34c724 !important;
+        border-color: rgb(26 199 82 / 20%);
+        font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+</style>

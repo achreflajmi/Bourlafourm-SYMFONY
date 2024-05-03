@@ -1,3 +1,26 @@
-controllers:
-    resource: '../src/Controller/'
-    type: annotation
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+app:
+  resource: "../src/Controller/"
+  type: annotation
+
+search-coordinates:
+  path: /search-coordinates
+  controller: App\Controller\SportController::searchCoordinates
+
+calculate_expression:
+  path: "/calculate-expression"
+  controller: 'App\Controller\SportController::calculateExpression'
+  methods: ["POST"]
+
+export_data:
+  path: "/export-data"
+  controller: 'App\Controller\SportController::exportData'
+timer:
+  path: /timer
+  controller: App\Controller\SportController::exportData'
+stat:
+  path: /stat
+  controller: App\Controller\StatController::statistiquesIMC
+  methods: GET

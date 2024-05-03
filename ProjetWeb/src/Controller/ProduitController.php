@@ -4,14 +4,15 @@ namespace App\Controller;
 use App\Entity\Produit;
 use App\Entity\Categorie;
 use App\Form\ProduitType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Knp\Component\Pager\PaginatorInterface;
 
 class ProduitController extends AbstractController
 {
@@ -25,12 +26,20 @@ class ProduitController extends AbstractController
         ]);
     }
     #[Route('/produits', name: 'displayFront')]
-    public function indexFront(): Response
+    public function indexFront(Request $request, PaginatorInterface $paginator, UserRepository $userRepository): Response
     {
-
-        $produits= $this->getDoctrine()->getManager()->getRepository(Produit::class)->findAll();
+        $userId = 1;
+        $user = $userRepository->find($userId);
+        $query = $this->getDoctrine()->getManager()->getRepository(Produit::class)->createQueryBuilder('p');
+    
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            6
+        );
         return $this->render('Front/produit/index.html.twig', [
-           'p'=>$produits
+           'pagination' => $pagination,
+           'user' => $user,
         ]);
     }
     #[Route('/admin', name: 'display_produitAdmin')]
@@ -157,5 +166,85 @@ class ProduitController extends AbstractController
         $session->getFlashBag()->add('success', 'Product deleted successfully.');
         return $this->redirectToRoute('display_produit');
     }
+    #[Route('/searchProduit', name: 'search_produit')]
+    public function searchProduit(Request $request, EntityManagerInterface $em): Response
+    {
+        $query = $request->request->get('query');
+    
+        $results = $em->getRepository(Produit::class)->search($query);
+    
+        // Render only the search results template without the full layout
+        return $this->render('Front/produit/search_results.html.twig', [
+            'results' => $results,
+        ]);
+    }
+    #[Route('/searchProduitB', name: 'search_produitB')]
+    public function searchProduitB(Request $request, EntityManagerInterface $em): Response
+    {
+        $query = $request->request->get('query');
+    
+        $results = $em->getRepository(Produit::class)->search($query);
+    
+        // Render only the search results template without the full layout
+        return $this->render('Back/produit/search_results.html.twig', [
+            'results' => $results,
+        ]);
+    }
+    #[Route('/AfficherProduit/tricroi', name: 'tri', methods: ['GET', 'POST'])]
+    public function triCroissant(\App\Repository\ProduitRepository $pr): Response
+    {
+        $produit = $pr->findAllSorted();
+
+        return $this->render('Back/produit/index.html.twig', [
+            'p' => $produit,
+        ]);
+    }
+
+    #[Route('/AfficherProduit/tridesc', name: 'trid', methods: ['GET', 'POST'])]
+    public function triDescroissant(\App\Repository\ProduitRepository $pr): Response
+    {
+        $produit = $pr->findAllSorted1();
+
+        return $this->render('Back/produit/index.html.twig', [
+            'p' => $produit,
+        ]);
+    }
+
+    #[Route('/AfficherProduit/stat', name: 'stat', methods: ['POST', 'GET'])]
+public function statisticsByCategory(\App\Repository\ProduitRepository $repo, Request $request): Response
+{
+    // Fetch all distinct category names from the Categorie table
+    $categories = $repo->getAllCategoryNames();
+
+    // Initialize an empty array to store category statistics
+    $categoryStatistics = [];
+
+    // Calculate total count of products
+    $total = 0;
+
+    // Calculate count and percentage for each category
+    foreach ($categories as $category) {
+        $count = $repo->countByNomCategorie($category['nom_categorie']);
+        $total += $count;
+        $categoryStatistics[$category['nom_categorie']] = $count;
+    }
+
+    // Calculate percentages if total is not zero
+    if ($total != 0) {
+        foreach ($categoryStatistics as $category => &$count) {
+            $percentage = round(($count / $total) * 100);
+            $count = [
+                'count' => $count,
+                'percentage' => $percentage,
+            ];
+        }
+    }
+
+    return $this->render('/Back/produit/stat.html.twig', [
+        'categoryStatistics' => $categoryStatistics,
+    ]);
+}
+
+    
 }
 

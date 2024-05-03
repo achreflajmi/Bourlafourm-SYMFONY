@@ -1,0 +1,116 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block title %}Modification{% endblock %}
+
+{% block body %}
+
+<div class="container">
+<div class="hero overlay" style="background-image: url('images/bg_3.jpg');">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-9 mx-auto text-center">
+            <h1 class="text-white">Modifier Coordonnées</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br><br>      <br><br>    <br><br>   <br><br> 
+    <h1 class="text-center mb-4">Modification</h1>
+
+    <div class="row justify-content-center">
+       
+
+        <!-- Formulaire à droite -->
+        <div class="col-md-6 order-md-2">
+            {{ form_start(formAdd, {'attr': {'class': 'form-contact contact_form', 'novalidate': 'novalidate'}}) }}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                {{ form_widget(formAdd.sexe, {'attr': {'placeholder': 'Sexe', 'class': 'form-control', 'id': 'sexe'}}) }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                {{ form_widget(formAdd.age, {'attr': {'placeholder': 'Âge', 'class': 'form-control', 'id': 'age'}}) }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                {{ form_widget(formAdd.taille, {'attr': {'placeholder': 'Taille', 'class': 'form-control', 'id': 'taille'}}) }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                {{ form_widget(formAdd.poids, {'attr': {'placeholder': 'Poids', 'class': 'form-control', 'id': 'poids'}}) }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                {{ form_widget(formAdd.imc, {'attr': {'placeholder': 'IMC', 'class': 'form-control', 'readonly': 'readonly', 'id': 'imc'}}) }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-right">
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(formAdd) }}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to calculate BMI
+    function calculateBMI() {
+        var weight = parseFloat(document.getElementById("formAdd_poids").value);
+        var height = parseFloat(document.getElementById("formAdd_taille").value);
+        
+        if (!isNaN(weight) && !isNaN(height) && height !== 0) {
+            var bmi = weight / (height * height);
+            document.getElementById("formAdd_imc").value = bmi.toFixed(2); // Display BMI with two decimal places
+        }
+    }
+
+    // Add event listeners to trigger BMI calculation when weight or height fields change
+    document.getElementById("formAdd_poids").addEventListener("input", calculateBMI);
+    document.getElementById("formAdd_taille").addEventListener("input", calculateBMI);
+</script>
+
+
+<style>
+.btn-primary {
+    color: #fff;
+    background-color: #0c4008;
+    border-color: #1e8d18;
+}
+
+/* Style pour le cadre de l'image */
+.image-cadre {
+    border: 3px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    background: #a2f797; /* Couleur verte pour l'arrière-plan */
+    position: relative;
+}
+
+/* Style pour l'arrière-plan semi-transparent */
+.hero.overlay:before {
+    position: absolute;
+    background: rgb(10 98 30 / 50%);
+    bottom: 0;
+}
+
+/* Style spécifique pour les contrôles de formulaire */
+.form-control {
+    height: 43px;
+    border-radius: 4px;
+    background: none;
+    border-width: 1px;
+    color: #34c724 !important;
+    border-color: rgb(26 199 82 / 20%);
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+</style>
+{% endblock %}
