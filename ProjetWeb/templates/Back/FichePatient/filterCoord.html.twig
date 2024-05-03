@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des fiches patients filtrés{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Style pour les tableaux */
+        a.ab {
+            margin-left: 300px; 
+        }
+        h2 {
+            margin-left: 300px; 
+        }
+        form {
+            margin-left: 300px; 
+        }
+        table {
+            width: 900px;
+            border-collapse: collapse;
+            margin-left: 300px; 
+            margin-right: 300px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+<br></br>
+{# Formulaire de recherche #}
+<form action="{{ path('search-coordinates') }}" method="get">
+    <label for="sexe">Sexe :</label>
+    <select name="sexe" id="sexe">
+        <option value="">Tous</option>
+        <option value="Homme">Homme</option>
+        <option value="Femme">Femme</option>
+    </select>
+    <button type="submit">Rechercher</button>
+</form>
+
+<h2>Coordonnées</h2>
+<h2>Résultats de la recherche</h2>
+<table>
+    <tr>
+        <th>Sexe</th>
+        <th>Âge</th>
+        <th>Taille</th>
+        <th>Poids</th>
+        <th>IMC</th>
+    </tr>
+    {% for coordonnee in coordonnees %}
+    <tr>
+        <td>{{ coordonnee.sexe }}</td>
+        <td>{{ coordonnee.age }}</td>
+        <td>{{ coordonnee.taille }}</td>
+        <td>{{ coordonnee.poids }}</td>
+        <td>{{ coordonnee.imc }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a class="ab" href="{{ path('export_data', {'sexe': app.request.query.get('sexe') }) }}">Exporter les données au format CSV</a>
+
+{# Autres tableaux de données #}
+{# Tableau des régimes #}
+<h2>Régimes</h2>
+<table>
+    <tr>
+        <th>Petit déjeuner</th>
+        <th>Collation du matin</th>
+        <th>Déjeuner</th>
+        <th>Collation de l'après-midi</th>
+        <th>Dîner</th>
+    </tr>
+    {% for regime in regimes %}
+    <tr>
+        <td>{{ regime.petitdej }}</td>
+        <td>{{ regime.colpdej }}</td>
+        <td>{{ regime.dej }}</td>
+        <td>{{ regime.coldej }}</td>
+        <td>{{ regime.diner }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br></br>
+
+{# Tableau des exercices #}
+<h2>Exercices</h2>
+<table>
+    <tr>
+        <th>Nom</th>
+        <th>Description</th>
+    </tr>
+    {% for exercice in exercices %}
+    <tr>
+        <td>{{ exercice.nom }}</td>
+        <td>{{ exercice.description }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

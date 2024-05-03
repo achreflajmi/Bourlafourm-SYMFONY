@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques IMC{% endblock %}
+
+{% block body %}
+<div class="marg">
+    <div class="container">
+        <h1 class="text-center mb-4">Statistiques IMC</h1>
+        <canvas id="imcChart" width="800" height="400"></canvas>
+    </div>
+</div>
+
+<style>
+    .marg {
+        margin-left: 300px;
+        margin-right: 50px;
+    }
+    canvas {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Récupérer les données des IMC depuis Symfony
+    const imcData = {{ imcData|json_encode|raw }};
+
+    // Préparer les données pour l'affichage
+    const categories = ['Poids insuffisant', 'Poids santé', 'Excès de poids', 'Obésité'];
+    const categoryCounts = {{ categoryCounts|json_encode|raw }};
+
+    // Créer le graphique en barres
+    const ctx = document.getElementById('imcChart').getContext('2d');
+    const imcChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: categories,
+            datasets: [{
+                label: 'Nombre de personnes',
+                data: Object.values(categoryCounts),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+{% endblock %}

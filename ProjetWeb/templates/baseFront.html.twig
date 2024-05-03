@@ -63,44 +63,27 @@ img.logo {
             </a>
           </div>
           <div class="ml-auto">
-        <nav class="site-navigation position-relative text-right" role="navigation">
-    <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
-        <li class="active"><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="./produits" class="nav-link">Produits</a></li>
-        <li class="packs-menu-item">
-            <a href="#" class="nav-link packs-trigger">Packs</a>
-            <ul class="sub-menu">
-                <li><a href="{{ path('create_Ex')}}  class="nav-link">Exercices</a></li>
-    <li><a href="{{ path('create_Regime') }}" class="nav-link">Régime</a></li>
-                <li><a href="{{ path('create_coordonnees')}}  class="nav-link">Coordonnées</a></li>
-            </ul>
-        </li>
-        <li><a href="contact.html" class="nav-link">Soins</a></li>
-    </ul>
-</nav>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Cacher les sous-menus au chargement de la page
-        $('.sub-menu').hide();
-
-        // Gérer le clic sur l'élément "Packs"
-        $('.packs-trigger').click(function(e) {
-            e.preventDefault(); // Empêcher le comportement par défaut du lien
-
-            // Trouver le sous-menu associé
-            var subMenu = $(this).siblings('.sub-menu');
-
-            // Afficher ou masquer le sous-menu avec une animation
-            subMenu.slideToggle('fast');
-
-            
-        });
-    });
-</script>
-
-
+            <nav class="site-navigation position-relative text-right" role="navigation">
+              <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+                <li class="active"><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="./produits" class="nav-link">Produits</a></li>
+                <li><a href="players.html" class="nav-link">événement</a></li>
+                <li class="nav-item dropdown">
+    <a class="nav-link nav-link-dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Packs
+    </a>
+    <!-- Liste déroulante avec les propositions -->
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    
+         <a class="dropdown-item" href="./createCoordonnees">Coordonnées</a>
+        <a class="dropdown-item" href="./createEx">Exercices</a>
+        <a class="dropdown-item" href="./createRegime">Régime</a>
+        <a class="dropdown-item" href="./pack">Choisir Pack</a>
+    </div>
+</li>
+                <li><a href="contact.html" class="nav-link">Soins</a></li>
+              </ul>
+            </nav>
 
             <a href="#" class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right text-white"><span
                 class="icon-menu h3 text-white"></span></a>

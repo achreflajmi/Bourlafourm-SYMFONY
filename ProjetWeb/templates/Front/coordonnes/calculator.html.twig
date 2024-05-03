@@ -1,0 +1,97 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block title %}Calculatrice{% endblock %}
+
+{% block body %}
+
+    <br><br> <br><br> <br><br> <br><br>
+
+ 
+    <h1 class="text-center mb-4">Calculatrice</h1>
+<h5 class="text-center mb-4">IMC = poids (en kg)/taille² (en m)</h5>
+    <div class="row justify-content-center">
+        <div class="col-md-6 order-md-2">
+            <form method="post" action="{{ path('calculate_expression') }}" novalidate class="text-center">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="expression" placeholder="Entrez votre expression mathématique" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mb-3">Calculer</button>
+            </form>
+        </div>
+    </div>
+
+    {% if result is defined %}
+    <div class="row justify-content-center">
+        <div class="col-md-6 order-md-2">
+            <div class="alert alert-success" role="alert">
+                Résultat : {{ result }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+     <!-- Bouton pour naviguer vers la page createCoordonnees -->
+    <div class="row justify-content-center">
+        <div class="col-md-6 order-md-2">
+            <a href="{{ path('create_coordonnees') }}" class="btn btn-primary btn-block mb-3">Ajouter Coordonnées</a>
+        </div>
+    </div>
+</div>
+<br><br> <br><br> <br><br> <br><br>
+
+<style>
+    .btn-primary {
+        color: #fff;
+        background-color: #0c4008;
+        border-color: #1e8d18;
+    }
+
+    .form-control {
+        height: 43px;
+        border-radius: 4px;
+        background: none;
+        border-width: 1px;
+        color: #34c724 !important;
+        border-color: rgb(26 199 82 / 20%);
+        font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+   .btn-primary {
+        color: #fff;
+        background-color: #0c4008;
+        border-color: #1e8d18;
+    }
+
+    /* Style pour le cadre de l'image */
+    .image-cadre {
+        border: 3px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        overflow: hidden;
+        background: #a2f797; /* Couleur verte pour l'arrière-plan */
+        position: relative;
+    }
+
+    /* Style pour l'arrière-plan semi-transparent */
+    .hero.overlay:before {
+        /* content: ""; */
+        position: absolute;
+        background: rgb(10 98 30 / 50%);
+        /* top: 0; */
+        /* left: 0; */
+        /* right: 0; */
+        bottom: 0;
+    }
+
+    /* Style spécifique pour les contrôles de formulaire */
+    .form-control {
+        height: 43px;
+        border-radius: 4px;
+        background: none;
+        border-width: 1px;
+        color: #34c724 !important;
+        border-color: rgb(26 199 82 / 20%);
+        font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+</style>
+
+
+{% endblock %}

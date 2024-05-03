@@ -98,4 +98,14 @@ class Coordonnees
 
         return $this;
     }
+    // Méthode pour calculer l'IMC
+    public function calculateImc(): ?float
+    {
+        if ($this->getTaille() && $this->getPoids()) {
+            $imc = $this->getPoids() / ($this->getTaille() * $this->getTaille());
+            return round($imc, 2);
+        }
+
+        return null;
+    }
 }
