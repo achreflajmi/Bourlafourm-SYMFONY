@@ -1,0 +1,111 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Custom CSS for modern design */
+        body {
+            background-color: #000; /* Black background color */
+            color: #fff; /* White text color */
+        }
+
+        h1 {
+            color: #28a745; /* Green header color */
+        }
+
+        #login {
+            padding: 80px 0; /* Adjust padding */
+        }
+
+        .services {
+            background-color: #000; /* Black background color for section */
+        }
+
+        .card {
+            background-color: #333; /* Darker background color for card */
+            border: 2px solid #28a745; /* Green border color */
+        }
+
+        .card-body {
+            padding: 0; /* Reset card body padding */
+        }
+
+        .h4 {
+            color: #28a745; /* Green color for h4 text */
+        }
+
+        .form-control {
+            background-color: #000; /* Black background for form inputs */
+            color: #fff; /* White text color for form inputs */
+            border-color: #28a745; /* Green border color for form inputs */
+        }
+
+        .btn-primary {
+            background-color: #28a745; /* Green button background color */
+            border-color: #28a745; /* Green button border color */
+        }
+
+        .btn-primary:hover {
+            background-color: #218838; /* Darker green on hover */
+            border-color: #1e7e34; /* Darker green border on hover */
+        }
+
+        .btn-danger {
+            background-color: #dc3545; /* Red button background color */
+            border-color: #dc3545; /* Red button border color */
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333; /* Darker red on hover */
+            border-color: #bd2130; /* Darker red border on hover */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1>Profile</h1>
+    <section id="login" class="services section-bg">
+        <div class="row justify-content-center">
+            <div class="container-fluid">
+                <hr>
+                <div class="container">
+                    <div class="card o-hidden border-0 shadow-lg my-lg-5">
+                        <div class="card-body p-0">
+                            <!-- Nested Row within Card Body -->
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="p-5">
+                                        <h1 class="h4 text-gray-900 mb-4">Add Reservation</h1>
+                                        <div class="text-center">
+                                            {{ form_start(FRes, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                                            <div class="form-group">
+                                                {{ form_row(FRes.nom_rese_event, {attr: {'class': 'form-control form-control-user','readonly': 'readonly'}}) }}
+                                            </div>
+
+                                            <div class="form-group">
+                                                {{ form_row(FRes.nbr_place_reserv, {attr: {'class': 'form-control form-control-user'}}) }}
+                                            </div><br>
+
+                                            <div class="form-group">
+                                                {{ form_row(FRes.Email, {attr: {'class': 'form-control form-control-user'}}) }}
+                                            </div>
+
+                                            <br><hr><br>
+
+                                            <button class="btn btn-primary btn-lg btn-block" type="submit">Add Reservation</button>
+                                            <br>
+                                            <a href="/EvenementsClientCards" class="btn btn-danger btn-lg btn-block">Cancel</a>
+                                            {{ form_end(FRes)}}
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
