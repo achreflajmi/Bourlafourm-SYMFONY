@@ -1,0 +1,176 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Custom CSS for event cards */
+        .card {
+            background-color: black; /* Set background color to black */
+            color: #28a745; /* Set text color to green */
+            border: 2px solid #28a745; /* Add green border */
+            border-radius: 10px; /* Add border radius */
+        }
+
+        .card-title {
+            font-size: 1.5rem; /* Increase font size for event title */
+            margin-bottom: 10px; /* Add margin bottom for separation */
+        }
+
+        .card-body {
+            padding: 20px; /* Add padding to card body */
+        }
+
+        .btn-primary {
+            background-color: #28a745; /* Set button background color to green */
+            border-color: #28a745; /* Set button border color to green */
+        }
+
+        .btn-primary:hover {
+            background-color: #218838; /* Darken button background color on hover */
+            border-color: #1e7e34; /* Darken button border color on hover */
+        }
+
+        .form-control {
+            background-color: #343a40; /* Set input background color to dark grey */
+            color: #28a745; /* Set input text color to green */
+            border-color: #28a745; /* Set input border color to green */
+        }
+
+        .form-control::placeholder {
+            color: #6c757d; /* Set placeholder text color to light grey */
+        }
+
+        .form-control:focus {
+            background-color: #495057; /* Set input background color to darker grey on focus */
+            color: #28a745; /* Set input text color to green on focus */
+            border-color: #28a745; /* Set input border color to green on focus */
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); /* Add green shadow on focus */
+        }
+
+        .rounded-pill {
+            border-radius: 50px; /* Increase border-radius for rounded input */
+        }
+
+        #searchInput {
+            background-color: #343a40; /* Set search input background color to dark grey */
+            color: #28a745; /* Set search input text color to green */
+            border-color: #28a745; /* Set search input border color to green */
+        }
+        
+        /* Adjust card width */
+        .col-sm-4 {
+            width: 30%; /* Set desired width */
+        }
+
+        /* Adjust image size */
+        .img-fluid {
+            width: 100%; /* Set image width to 100% of container */
+            height: auto; /* Maintain aspect ratio */
+        }
+/* Add top margin to container */
+.search-bar-container {
+            margin-top: 80px; /* Adjust as needed */
+        }
+
+        /* Add top margin to cards */
+        .cards-container {
+            margin-top: 160px; /* Adjust as needed */
+        }
+       
+        
+    </style>
+{% endblock %}
+
+{% block body %}
+    <section id="liste" class="services section-bg">
+        <div class="container-fluid search-bar-container">
+            <hr>
+            <!-- Page Heading -->
+
+            <!-- Advanced Search Input -->
+            <div class="row justify-content-center mb-3">
+                <div class="col-md-6" style="top: 100px;">
+                    <div class="input-group">
+                        <input id="searchInput" type="text" class="form-control rounded-pill" placeholder="Rechercher...">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid cards-container">
+
+            <div class="container">
+                <div class="row" id="eventList">
+                    {% for Eve in pagination.items %}
+                        {% set image = Eve.image ?: 'img.png' %}
+                        <div class="col-sm-4 mb-4">
+                            <div class="card mdb-color lighten-2 text-center z-depth-2">
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <div class="image-cropper">
+                                            <img class="img-fluid rounded" src="{{ asset('assets/images/' ~ image) }}" alt="{{ Eve.NomEvent }}" style="width: 150px; height: 150px;">
+                                        </div>
+                                        <hr>
+                                        <h5 class="card-title">{{ Eve.NomEvent }}</h5>
+                                        <p>Type: {{ Eve.Type }}</p>
+                                        <p>Organisateur: {{ Eve.organisateur }}</p>
+                                        <p>Date Debut: {{ Eve.Date_deb|date('d/m/Y') }}</p>
+                                        <p>Date Fin: {{ Eve.Date_fin|date('d/m/Y') }}</p>
+                                        <p>Capacite: {{ Eve.Capacite }}</p>
+                                        <a href="{{ path('app_reservation_new', {'id': Eve.idEvent, 'nom_rese_event': Eve.NomEvent}) }}" class="btn btn-primary">Réserver</a>
+                                        <a href="{{ path('generate_event_pdf', {'id': Eve.idEvent}) }}" class="btn btn-primary">Generate PDF</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+<!-- Pagination -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-4">
+        {% if pagination.currentPageNumber > 1 %}
+    <li class="page-item">
+        <a class="page-link" href="{{ path('EvenementsClientCards') }}?page={{ pagination.currentPageNumber - 1 }}">Previous</a>
+    </li>
+{% endif %}
+        
+{% for page in range(1, pagination.pageCount) %}
+{% if pagination.currentPageNumber == page %}
+    <li class="page-item active"><span class="page-link">{{ page }}</span></li>
+{% else %}
+    <li class="page-item"><a class="page-link" href="{{ path('EvenementsClientCards') }}?page={{ page }}">{{ page }}</a></li>
+{% endif %}
+{% endfor %}
+
+        
+{% if pagination.currentPageNumber < pagination.pageCount %}
+<li class="page-item">
+    <a class="page-link" href="{{ path('EvenementsClientCards') }}?page={{ pagination.currentPageNumber + 1 }}">Next</a>
+</li>
+{% endif %}
+    </ul>
+</nav>
+</div>
+
+
+
+    </section>
+
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const events = document.querySelectorAll('.event-item');
+
+            events.forEach(function(event) {
+                const eventName = event.querySelector('.card-title').innerText.toLowerCase();
+                if (eventName.includes(query)) {
+                    event.style.display = 'block';
+                } else {
+                    event.style.display = 'none';
+                }
+            });
+        });
+    </script>
+{% endblock %}
