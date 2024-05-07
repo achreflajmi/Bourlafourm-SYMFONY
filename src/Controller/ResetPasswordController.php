@@ -14,8 +14,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 class ResetPasswordController extends AbstractController
 {
-   // Cette annotation définit une route pour l'URL '/reset-password' et lui donne un nom 'reset_password'.
-// Cela signifie que lorsque vous visitez http://votre-domaine.com/reset-password, cette méthode sera exécutée.
+
 #[Route('/reset-password', name: 'reset_password')]
 public function resetPassword(Request $request, EntityManagerInterface $entityManager , MailerInterface $mailer)
 {
@@ -28,7 +27,7 @@ public function resetPassword(Request $request, EntityManagerInterface $entityMa
         $data = $form->getData();
         
         $toemail = $data->getEmail();
-        //récupérer un utilisateur par son e-mail
+        
         $user = $entityManager->getRepository(User::class)->getUserByEmail($toemail);
         
         
@@ -40,12 +39,12 @@ public function resetPassword(Request $request, EntityManagerInterface $entityMa
             
             $entityManager->flush();
 
-            // Crée le corps de l'e-mail en HTML.
+            
             $html = '
             <html>
                 <body>
-                    <p>Hi user,</p>
-                    <p>Someone has requested a link to change your password. You can do this through the link below.</p>
+                    <p>Hi,</p>
+                    <p>We got your request to change your password. You can do this through the link below.</p>
                     <p><a href="http://localhost:8070/verify-reset-code/'.$resetCode.'">Change my password</a></p>
 
                     <p>If you didn\'t request this, please ignore this email.</p>
@@ -61,7 +60,6 @@ public function resetPassword(Request $request, EntityManagerInterface $entityMa
             ->html($html);
             $mailer->send($email);
 
-            // Redirige l'utilisateur vers la page de connexion après l'envoi de l'e-mail.
             return $this->redirectToRoute('app_login');
         }
     }
@@ -77,7 +75,6 @@ public function resetPassword(Request $request, EntityManagerInterface $entityMa
         // Find the user by the reset code
         $user = $entityManager->getRepository(User::class)->getUserByResetCode(['resetCode' => $resetCode]);
         if (!$user) {
-            // Handle invalid or expired reset code
             return $this->redirectToRoute('reset_password');
         }
 
@@ -92,13 +89,12 @@ public function resetPassword(Request $request, EntityManagerInterface $entityMa
                 $this->addFlash('error', 'Password and confirm password does not match');
                 return $this->redirectToRoute('verify_reset_code', ['resetCode' => $resetCode]);
             }
-            // Update the user's password
+            
             $hashedPassword = $userPasswordHasher->hashPassword($user, $data->getPassword());
             $user->setPassword($hashedPassword);
             $user->setResetCode(null);
             $entityManager->flush();
 
-            // Redirect or render a success message
             return $this->redirectToRoute('app_login');
         }
 
@@ -109,7 +105,6 @@ public function resetPassword(Request $request, EntityManagerInterface $entityMa
 
     private function generateResetCode()
     {
-        // Generate a unique reset code (you can customize the logic)
         return uniqid();
     }
 }

@@ -68,15 +68,12 @@ class GuestController extends AbstractController
             throw $this->createNotFoundException('Utilisateur non trouvé avec l\'identifiant : ' . $id);
         }
     
-        // Récupérer les réclamations associées à cet utilisateur
         $reclamations = $user->getReclationID();
     
-        // Supprimer chaque réclamation
         foreach ($reclamations as $reclamation) {
             $em->remove($reclamation);
         }
     
-        // Enfin, supprimer l'utilisateur
         $em->remove($user);
         $em->flush();
     
@@ -110,7 +107,6 @@ class GuestController extends AbstractController
         
         $newPassword = $form->get('password')->getData();
         if (!empty($newPassword)) {
-            // Encodage du nouveau mot de passe
             $encodedPassword = $passwordEncoder->encodePassword($user, $newPassword);
             $user->setPassword($encodedPassword);
         }
@@ -125,7 +121,6 @@ class GuestController extends AbstractController
                 
                 
             } catch (FileException $e) {
-                // Handle file exception
             }
             $user->setImage($fileName);
         }

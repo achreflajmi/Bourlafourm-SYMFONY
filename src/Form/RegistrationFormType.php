@@ -42,7 +42,7 @@ class RegistrationFormType extends AbstractType
             return (string) $role;
         }, $roles);
  $builder
-        ->add('name', null, [
+        ->add('nom', null, [
             'constraints' => [
                 new NotBlank([
                     'message' => 'Veuillez entrer un nom',

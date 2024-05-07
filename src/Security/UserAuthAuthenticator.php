@@ -62,7 +62,7 @@ class UserAuthAuthenticator extends AbstractLoginFormAuthenticator
 
         $user = $token->getUser();
 
-        // Vérifier si l'utilisateur est signalé
+        
         if ($user->getIsReported()) {
             
             return new RedirectResponse($this->urlGenerator->generate('app_login'));
@@ -73,7 +73,7 @@ class UserAuthAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
     
-        // Get the user role
+        
         $userRole = $token->getUser()->getRoles()[0];
 
     
